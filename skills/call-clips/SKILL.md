@@ -9,6 +9,8 @@ description: Turn a long recording you already have, a sales call, a coaching ca
 
 You end with 3 to 5 vertical clips, ranked, and one line on why each one made the cut.
 
+**Tested so far on a solo recording.** On a two-person call, read the speaker turns in the transcript and pick moments where one person talks for 15 seconds or more. Crosstalk and small talk make weak clips.
+
 ## Step 1: Ask for two things, then wait
 
 1. **The recording.** Any length. Camera, Zoom, screen recording or a finished video.
