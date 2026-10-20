@@ -22,11 +22,11 @@ One big 3D object per beat, acting out the noun you say. This is the system behi
 ## The grammar
 
 - **One hero per beat that acts out its noun.** "Steps" = a 3D staircase a ball climbs. "Five minutes against an hour" = two clock dials, the hour shatters. "Edit" = a timeline with a playhead that cuts. Not a denser list.
-- **It fills the panel:** x 74-1006, y 170-880 on split beats. A third of the panel looks basic.
-- **The payoff lands on its word.** Stretch the beat's clock so the last step hits the word, not the cut.
-- **Carry the object across the cut.** It swings into depth as the next hero rises in front.
+- **It fills the panel:** x 74-1006, y 170-880 on split beats. Fill the long side: a wide hero touches both side edges, a round or tall one touches top and bottom. A third of the panel looks basic.
+- **The payoff lands on its word,** at the moment the word starts (its `s` time in words.js). Stretch the beat's clock so the last step hits the word, not the cut.
+- **Carry the object across the cut.** The engine clears the stage at each cut, so the new beat draws the old hero itself for its first 0.3s, sliding sideways and fading out while the new hero rises. Swinging it straight back on the same line as the new one stacks two heroes and reads as a muddle.
 - **The hook IS the animation.** No flat title card if the first hero can carry the hook.
-- **Demos use a real Claude Code window,** with the real command typing live. Never a drawn stand-in, and never a command the build did not run.
+- **Demos show a Claude Code window with the real command.** Best: a screen recording of the real run. Next best: a terminal built in HTML that matches the real one, typing the real command. Never a command the build did not run.
 - **Bad items go grey and lift out.** No strike lines or scribbles.
 
 ## The moves that worked
@@ -38,21 +38,21 @@ One big 3D object per beat, acting out the noun you say. This is the system behi
 | Phone arc | Three phones in a 3D arc, one swipe per word, a different real video on each |
 | Count-up card | A 128px number counts up on its word, label under it |
 | Drop zone | A file falls in with gravity, a waveform rises, bad parts lift out grey |
-| Head pop-out | On split beats the head breaks out of the top of the face card (cut-out of the same frame, scale 1.1 at most) |
+| Head pop-out | On split beats the head breaks out of the top of the face card (cut-out of the same frame, scale 1.1 at most). The cut-out frames come from the cut-out step in `behind-my-head` |
 | Zoom-through | Scale and blur through the cut, only between two graphic beats. Face cuts stay hard |
 
 ## Step 2: Beat sheet, then wait
 
-Per beat: time, layout, spoken words, the noun, the hero and the word it lands on. Show it. Build stills of every beat before any render, and get a yes.
+Per beat: time, layout, spoken words, the noun, the hero and the word it lands on. Show it. Build stills of every beat before any render (`node render.mjs --stills 3.2,6.5,8.9`, one time per landing word), and get a yes.
 
 ## Step 3: Build brief (paste into Claude Code)
 
 ```
 Edit video.js only. One hero object per beat from my beat sheet. Build each in 3D with CSS perspective (1400px) and transforms worked out from time alone.
-Entrances: slam from translateZ(-900px) with spring(), no overshoot. Exits: crash into depth with gravity.
+Entrances: slam from translateZ(-900px) with easeOut() (spring() overshoots about 3%, keep it for small pops). Exits: crash into depth with gravity.
 Every hero fills x 74-1006, y 170-880 on split beats and lands on the word I named. Stretch the beat's own clock so the last change hits that word.
 At each cut, carry the hero into the next beat and swing it away while the next hero rises. Never an empty frame.
-Demos: draw a real-looking Claude Code terminal (dark window, monospace, the real command I give you typing at 14 characters a second).
+Demos: use my screen recording if I give one. Otherwise build a terminal that matches Claude Code (dark window, monospace, the real command I give you typing at 14 characters a second).
 Use only my real assets. Never show the same example twice.
 Check stills at the landing word of every beat. Fix anything small, cropped or over the caption.
 ```

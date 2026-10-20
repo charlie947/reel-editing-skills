@@ -18,7 +18,7 @@
   /* face layer: one JPG per frame, cut from your recording */
   #face { position: absolute; object-fit: cover; transition: none; }
   #face.full  { left: 0; top: 0; width: 1080px; height: 1920px; border-radius: 0; }
-  #face.split { left: 40px; top: 1000px; width: 1000px; height: 860px; border-radius: 44px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.35); }
+  #face.split { object-position: 50% 35%; left: 40px; top: 1000px; width: 1000px; height: 860px; border-radius: 44px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.35); }
   #face.off   { display: none; }
 
   /* graphic stage: your beats draw in here */
@@ -101,7 +101,8 @@ const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const prog = (t, a, b) => clamp((t - a) / (b - a));              // 0..1 between a and b
 const easeOut = p => 1 - Math.pow(1 - p, 3);                      // snaps in, settles
 const spring = p => 1 - Math.exp(-6 * p) * Math.cos(9 * p * (1 - p)); // settle, tiny overshoot
-const wordAt = (w) => (WORDS.find(x => x.w.toLowerCase().replace(/[^a-z0-9]/g, '') === w.toLowerCase()) || {}).s;
+// start time of a spoken word. A word said more than once: pass the time to search after, e.g. wordAt('every', 5)
+const wordAt = (w, after = 0) => (WORDS.find(x => x.s >= after && x.w.toLowerCase().replace(/[^a-z0-9]/g, '') === w.toLowerCase()) || {}).s;
 
 // ---------- the engine: everything is worked out from t alone ----------
 const $ = id => document.getElementById(id);
@@ -116,7 +117,12 @@ function captionAt(t) {
     g.push(w);
   });
   if (g.length) groups.push(g);
-  const cur = groups.find(gr => t >= gr[0].s - 0.05 && t < (gr[gr.length - 1].e + 0.35));
+  // a group stays up 0.35s after its last word, but never past the next group's first word
+  const cur = groups.find((gr, i) => {
+    const next = groups[i + 1];
+    const end = Math.min(gr[gr.length - 1].e + 0.35, next ? next[0].s - 0.05 : Infinity);
+    return t >= gr[0].s - 0.05 && t < end;
+  });
   return cur || [];
 }
 
