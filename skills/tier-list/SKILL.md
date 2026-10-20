@@ -19,7 +19,7 @@ A ranking you can see fill up as you talk. Every item lands in its row on the wo
 4. **A cut-out of you for this beat.** `scripts/matte.py` in this skill makes it with RobustVideoMatting, free and local. No other skill in the pack ships a matting tool, so this is the one to use.
 
 ```
-pip install torch torchvision pillow numpy scipy     # once. scipy is optional, it fills small holes
+python3 -m pip install torch torchvision pillow numpy scipy     # once. scipy is optional, it fills small holes
 python3 <this skill>/scripts/matte.py my-video --from 3.1 --to 12.8
 ```
 
@@ -42,7 +42,9 @@ Add one beat to VIDEO.beats:
              items: [ { text: '[CHIP]', tier: 'S', word: '[WORD]' }, ... ] })
 Keep the items in the order I say them. Use tiers: ['S','A','B','C','D','F'] unless I give others.
 Every value comes from time alone inside draw(), so seek(t) gives the same frame every time.
-Then render stills 0.2s before the first item's word, on it, halfway through the list, and on the last item's word. Show them to me.
+Add one face beat after the last new beat (the starter shows the last beat in any gap until the next one starts).
+Render with `node render.mjs` from my-video. If it cannot find Puppeteer, run `npm i puppeteer` there once.
+Then render stills 0.2s before the first item's word, on it, on the word of the middle item, and on the last item's word. Show them to me.
 ```
 
 The template draws a white board with one row per tier (S in the accent, stepping down to grey for F), a face card in the same place as the starter's split card, and your cut-out over the card with the same crop, open at the top. Your head is the only part that rises above the card.

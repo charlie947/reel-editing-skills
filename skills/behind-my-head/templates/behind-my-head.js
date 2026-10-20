@@ -3,19 +3,22 @@
    Needs face/ (from video-intake) and cut/ (from scripts/matte.py) with the same frame numbers.
 
    A page behind you, landing on a word, with an optional part of it lifting out on a second word:
-     behindMyHead({ start: 4.2, end: 8.6, page: 'assets/page.png', url: 'yoursite.com/pricing', word: 'pricing',
+     behindMyHead({ start: 4.2, end: 8.6, page: 'assets/page.png', url: 'yoursite.com/pricing', word: 'pricing', headTop: 430,
                     focus: { word: 'annual', x: 40, y: 120, w: 300, h: 260 } })
    One number behind you, rolling in and settling on its word:
      behindMyHead({ start: 8.6, end: 11.4, number: '12,400', label: 'Customers', word: 'twelve', headTop: 430 })
 
    Options for both:
      word      the word it lands on (first time it is said inside the beat). A number of seconds also works
+     headTop   REQUIRED. The y of the top of your head, printed by scripts/matte.py. The graphic needs room above
+               your head. If your head sits too high, you are shrunk a little (down to 80%) onto a blurred copy of
+               the room to make that room. Past 80% it stops with an error that says what to change
      plate     'plate.jpg' from scripts/plate.py: blurred room behind and a slow camera push (tripod shots only)
      top       move the page or number up or down (pixels from the top of the frame)
      ext       'webp' (default) or 'png', whatever matte.py wrote
    Page only:  page (a real screenshot), url (types into the bar), height (visible page height, default 560),
                focus { word, x, y, w, h } a box on the page in pixels at 960 wide, it lifts out on its word
-   Number only: number ('12,400', '$3.2m', '87%'), label, size (digit height, default 220), headTop (from matte.py)
+   Number only: number ('12,400', '$3.2m', '87%'), label, size (digit height, default 220)
 
    Built for 9:16. For 4:5, 1:1 and 16:9 use a split beat for this line instead.
 */
@@ -51,10 +54,22 @@
     const FULL = 'position:absolute;left:0;top:0;width:1080px;height:1920px';
 
     // ---- the graphic that sits behind you ----
-    let graphic, H = o.height || 560, D = o.size || 220, digits = 0, top;
+    let graphic, H = o.height || 560, D = o.size || 220, digits = 0;
+    // room above your head: the page's top 55% or the whole number (bar its bottom quarter) must sit above it,
+    // and the label must clear Instagram's top 220px
+    const ht = o.headTop;
+    if (ht == null) throw new Error('behindMyHead: pass headTop, the number scripts/matte.py prints');
+    let top = isNum ? (o.top ?? 180) : (o.top ?? 200);
+    const need = isNum ? top + 100 + .75 * D : top + 66 + .55 * H;
+    const k = ht >= need ? 1 : (1920 - need) / (1920 - ht);                // shrink you from the bottom edge
+    if (k < .8) throw new Error(`behindMyHead: the top of your head is at y ${ht}. This beat needs it at y ${Math.round(need)} or lower, ` +
+      `and shrinking you to 80% only gets it to y ${Math.round(1920 - (1920 - ht) * .8)}. Film with your head lower in frame, ` +
+      `pass a smaller ${isNum ? 'size' : 'height'}, or use animated-numbers in a split beat for this line.`);
+    const htK = 1920 - (1920 - ht) * k;
+    if (isNum && o.top == null) top = Math.max(180, Math.round(htK - 100 - .75 * D));
     if (!isNum) {
-      top = o.top ?? 200;
       const f = o.focus;
+      if (f && f.y + f.h > .55 * H) throw new Error(`behindMyHead: the focus box ends at y ${f.y + f.h} on the page, behind your head. Pick a box in the top ${Math.round(.55 * H)}px of the page`);
       graphic = `
       <div class="bmh-persp" style="position:absolute;inset:0;perspective:1700px;perspective-origin:50% 40%">
         <div class="bmh-win" style="position:absolute;left:60px;top:${top}px;width:960px;border-radius:30px;overflow:hidden;background:#fff;transform-origin:50% 100%;opacity:0;
@@ -77,8 +92,6 @@
       const txt = String(o.number);
       digits = (txt.match(/\d/g) || []).length;
       const ph = D + 190;
-      // sit the number so your head covers only its bottom quarter
-      top = o.top ?? (o.headTop != null ? Math.max(120, Math.round(o.headTop + .25 * D - (110 + D))) : 160);
       let k = 0;
       const slots = [...txt].map(ch => {
         const cell = `display:block;height:${D}px;line-height:${D}px;font-size:${Math.round(D * .97)}px;font-weight:800;letter-spacing:-.04em;color:#1d1d1f;font-variant-numeric:tabular-nums`;
@@ -95,24 +108,28 @@
       </div>`;
     }
 
+    const SHRINK = k < 1 ? `transform:scale(${k});transform-origin:540px 1920px;` : '';
+    const SIDES = 'mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);';
+    const FEATHER = 'mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(transparent,#000 9%);mask-composite:intersect;';
     const scrim = isNum
       ? 'linear-gradient(180deg,rgba(4,6,12,.72),rgba(4,6,12,.25) 55%,rgba(0,0,0,0))'
       : 'radial-gradient(ellipse at 50% 30%,rgba(10,12,20,.25),rgba(5,6,10,.7))';
     const html = `
     <div class="bmh" style="${FULL};overflow:hidden;background:#000">
+      ${k < 1 ? `<img class="bmh-fill" ${plate ? `src="${esc(plate)}"` : ''} style="${FULL};filter:blur(30px) brightness(.5);transform:scale(1.12)">` : ''}
       <div class="bmh-room" style="position:absolute;inset:-40px;transform-origin:580px 940px">
-        <img class="bmh-bg" ${plate ? `src="${esc(plate)}"` : ''} style="position:absolute;left:40px;top:40px;width:1080px;height:1920px;${plate ? 'filter:blur(13px) brightness(.62) saturate(1.1)' : ''}">
+        <img class="bmh-bg" ${plate ? `src="${esc(plate)}"` : ''} style="position:absolute;left:40px;top:40px;width:1080px;height:1920px;${SHRINK}${k < 1 ? FEATHER : ''}${plate ? 'filter:blur(13px) brightness(.62) saturate(1.1)' : ''}">
       </div>
       <div class="bmh-scrim" style="position:absolute;inset:0;background:${scrim};opacity:0"></div>
       <div class="bmh-cam" style="position:absolute;inset:0;transform-origin:540px 900px">
         <div class="bmh-back" style="position:absolute;inset:0">${graphic}</div>
-        <img class="bmh-cut" style="${FULL}">
+        <img class="bmh-cut" style="${FULL};${SHRINK}${k < 1 ? SIDES : ''}">
       </div>
     </div>`;
 
     const URL_ = o.url || '';
     const s0 = Math.max(start, L - 0.19);                                   // page: first reaches full size on the word
-    const rollEnd = i => L - (digits - 1 - i) * 0.15;                       // number: the right digit settles first, the left one on the word
+    const rollEnd = i => L - (digits - 1 - i) * 0.15;                       // number: the left digit settles first, the right one on the word
     const rollStart = L - (digits - 1) * 0.15 - 1.0;
     const n0 = Math.max(start, rollStart - 0.2);
 
@@ -123,6 +140,7 @@
         // you, frame by frame: the room frame behind, the cut-out of the same frame in front
         const f = Math.min(VIDEO.faceFrames, Math.max(1, Math.round(t * VIDEO.fps) + 1));
         if (!plate) setSrc(q('bg'), 'face/' + pad6(f) + '.jpg');
+        if (k < 1 && !plate) setSrc(q('fill'), 'face/' + pad6(f) + '.jpg');
         setSrc(q('cut'), 'cut/' + pad6(f) + '.' + ext);
 
         const ex = io3(P(t, end - 0.3, 0.3));                                // the graphic falls back in the last 0.3s

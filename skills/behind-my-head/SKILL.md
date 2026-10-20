@@ -21,7 +21,7 @@ You stay in front. The page or the number sits behind you, in the room, and land
 4. **A cut-out of you for this beat.** `scripts/matte.py` in this skill makes it with RobustVideoMatting, free and local. No other skill in the pack ships a matting tool, so this is the one to use.
 
 ```
-pip install torch torchvision pillow numpy scipy     # once. scipy is optional, it fills small holes
+python3 -m pip install torch torchvision pillow numpy scipy     # once. scipy is optional, it fills small holes
 python3 <this skill>/scripts/matte.py my-video --from 12.4 --to 17.0
 ```
 
@@ -46,11 +46,13 @@ Per beat: start and end in the cut, the page or number, the landing word, the li
 ```
 Copy <this skill>/templates/behind-my-head.js to the very top of my-video/video.js, above window.VIDEO. Do not edit index.html.
 Add one beat per line in my beat sheet to VIDEO.beats:
-  behindMyHead({ start: [S], end: [E], page: 'assets/[page].png', url: '[address]', word: '[WORD]',
+  behindMyHead({ start: [S], end: [E], page: 'assets/[page].png', url: '[address]', word: '[WORD]', headTop: [headTop from matte.py],
                  focus: { word: '[WORD 2]', x: [X], y: [Y], w: [W], h: [H] } })
   behindMyHead({ start: [S], end: [E], number: '[FIGURE]', label: '[LABEL]', word: '[WORD]', headTop: [headTop from matte.py] })
 Add plate: 'plate.jpg' only if I ran plate.py for that beat.
-The focus box is in page pixels with the page drawn 960px wide. Measure it off the screenshot.
+The focus box is in page pixels with the page drawn 960px wide. Measure it off the screenshot. Pick a box in the top half of the page, never behind my head.
+Add one face beat after the last new beat (the starter shows the last beat in any gap until the next one starts).
+Render with `node render.mjs` from my-video. If it cannot find Puppeteer, run `npm i puppeteer` there once.
 Every value comes from time alone inside draw(), so seek(t) gives the same frame every time.
 Then render stills at the start, 0.2s before the word, on the word, on the lift word and 0.3s before the end. Show them to me.
 ```
@@ -63,7 +65,7 @@ Every move lands on its word from `words.js`. The template finds the first time 
 
 - **The page** starts rising 0.19s before the word, reaches full size on the word, then settles.
 - **The lift** reaches full size on its word and holds until 0.75s before the end.
-- **The number** rolls for about a second, the right digit settles first and the left digit settles exactly on the word.
+- **The number** rolls for about a second, the left digit settles first and the right digit settles exactly on the word.
 - **The exit** is the last 0.3s of the beat. The graphic falls back and fades, you stay.
 
 Start the beat at least 0.4s before a page word and 1.5s before a number word, or the entrance gets cut short.
@@ -81,7 +83,7 @@ Then run `video-check`.
 ## Check before you show
 
 - **Edges.** Crop the hair and hands at full size on three stills. No room halo, no bitten-off fingers. Fill holes from the original frame if the matte ate a mic or a dark shirt.
-- **Overlap.** Your head covers the lower part of the page or the bottom quarter of the number, never the main word or digit. Move it with `top`.
+- **Overlap.** Your head covers only the lower part of the page or the bottom quarter of the number, never the headline or a digit. The template needs the top of your head at about y 445 (number) or y 575 (page). Higher than that, it shrinks you a little onto a blurred copy of the room. Past 80% it stops and tells you what to change. Best fix: film with space above your head.
 - **The landing.** On the still at the word, the page is at full size. 0.2s before, it is still rising.
 - **Frames match.** Step through two stills 1 frame apart. The cut-out and the room move together. A one-frame slip shows as a double edge.
 - **Plate beats only.** No ghost of you in the blurred room. A handheld shot fails this, so drop the plate.

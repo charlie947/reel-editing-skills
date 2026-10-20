@@ -24,7 +24,7 @@ npx skills add charlie947/reel-editing-skills
 
 Then open Claude Code in an empty folder and run `video-intake` with your recording. Run `brand-setup` once with your website.
 
-You need `ffmpeg`, Node 18 or newer and Python 3. Whisper (free, local) gives the word timings. `behind-my-head` and `tier-list` also cut you out of the frame with RobustVideoMatting (free, local, `pip install torch torchvision`). The model downloads once and is GPL-3.0 licensed.
+You need `ffmpeg`, Node 18 or newer and Python 3. Whisper (free, local) gives the word timings. `behind-my-head` and `tier-list` also cut you out of the frame with RobustVideoMatting (free, local, `python3 -m pip install torch torchvision`). The model downloads once and is GPL-3.0 licensed.
 
 <details>
 <summary><strong>Manual copy</strong></summary>

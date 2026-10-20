@@ -114,7 +114,7 @@
           const c = nodes[i], k = fit[it.row], w = widths[i] * k;
           const tx = xAt[it.row]; xAt[it.row] += w + 12;
           const ty = R0 + it.row * (RH + GAP) + (RH - CH * k) / 2;
-          const p = P(t, it.at - 0.45, 0.55), e = out3(p);                 // launches from your head, lands on its word
+          const p = P(t, it.at - 0.45, 0.45), e = out3(p);                 // launches from your head, seated on its word
           const sx = 540 - w / 2, sy = CARD.y - 150;
           const x = sx + (tx - sx) * e, y = sy + (ty - sy) * e - Math.sin(Math.PI * p) * 60;
           c.style.opacity = t < it.at - 0.45 ? 0 : C(p * 5);
