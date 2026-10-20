@@ -1,6 +1,6 @@
 ---
 name: depth-ui
-description: Put the depth ui effect on your own talking-head clip and get an MP4 back. Your room falls away and you stand among real app windows at different depths: a terminal, a video timeline and a chat with your words. Optional words up to 60 characters. Runs on the shared engine in video-effects. Use when someone says "depth-ui", "apps floating around me", "depth UI", "windows behind me" or "add the app windows effect to my video".
+description: Put the depth ui effect on your own talking-head clip and get an MP4 back. Your room falls away and you stand among real app windows at different depths (a terminal, a video timeline and a chat with your words). Optional words up to 60 characters. Runs on the shared engine in video-effects. Use when someone says "depth-ui", "apps floating around me", "depth UI", "windows behind me" or "add the app windows effect to my video".
 ---
 
 # depth-ui
