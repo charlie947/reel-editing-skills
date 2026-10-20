@@ -19,7 +19,7 @@ These skills are the steps I use, with the rules that came out of real drafts I 
 ## Install
 
 ```bash
-npx skills add charlie947/reel-editing-skills
+npx skills add charlie947/reel-editing-skills -g
 ```
 
 Then open Claude Code in an empty folder and run `video-intake` with your recording. Run `brand-setup` once with your website.

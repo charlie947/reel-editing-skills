@@ -88,6 +88,25 @@ for skill_dir in "$SKILLS_DIR"/*/; do
   # Extract frontmatter (between the first two --- delimiters)
   frontmatter="$(awk '/^---[[:space:]]*$/{n++; next} n==1{print} n==2{exit}' "$skill_md")"
 
+  # Frontmatter must parse as YAML, or skill installers drop the skill silently
+  yaml_err="$(printf "%s\n" "$frontmatter" | python3 -c 'import sys
+try:
+    import yaml
+except ImportError:
+    print("SKIP"); sys.exit(0)
+try:
+    d = yaml.safe_load(sys.stdin.read())
+    assert isinstance(d, dict), "frontmatter is not a mapping"
+except Exception as e:
+    print(str(e).splitlines()[0])' 2>&1)"
+  if [[ "$yaml_err" == "SKIP" ]]; then
+    warn "PyYAML not installed, YAML parse not checked"
+  elif [[ -n "$yaml_err" ]]; then
+    err "frontmatter is not valid YAML: $yaml_err"
+  else
+    ok "frontmatter parses as YAML"
+  fi
+
   # name field
   yaml_name="$(printf "%s" "$frontmatter" | awk -F': ' '/^name:/{print $2; exit}' | tr -d '"' | tr -d "'" | tr -d '[:space:]')"
   if [[ -z "$yaml_name" ]]; then
