@@ -1,7 +1,7 @@
-<h1 align="center">Reel Editing Skill Pack</h1>
+<h1 align="center">Video Editing Skill Pack</h1>
 
 <p align="center">
-  <strong>17 skills that edit motion videos for Instagram and LinkedIn with Claude Code. Every frame is code.</strong>
+  <strong>17 skills that turn a to-camera recording into a polished motion video with Claude Code. One build, every platform. Every frame is code.</strong>
 </p>
 
 <p align="center">
@@ -12,7 +12,9 @@
 
 ---
 
-I edit my reels with Claude Code now. No CapCut, no Premiere. Claude cuts the take, builds every motion graphic as code, draws each frame and renders two MP4s from one build: a 9:16 reel for Instagram and a 4:5 video for LinkedIn. These 17 skills are the steps I use, with the rules that came out of real drafts I threw away.
+I edit my videos with Claude Code now. No CapCut, no Premiere, no editor. Claude cuts the take, builds every motion graphic as code in your brand, draws each frame and renders the MP4. One build gives you a 9:16 reel, a 4:5 LinkedIn video, a 1:1 ad and a 16:9 video for YouTube, your website or a sales email.
+
+These 17 skills are the steps I use, with the rules that came out of real drafts I threw away.
 
 ## Install
 
@@ -20,7 +22,7 @@ I edit my reels with Claude Code now. No CapCut, no Premiere. Claude cuts the ta
 npx skills add charlie947/reel-editing-skills
 ```
 
-Then open Claude Code in an empty folder and run `reel-intake` with your recording.
+Then open Claude Code in an empty folder and run `video-intake` with your recording. Run `brand-setup` once with your website.
 
 You need `ffmpeg`, Node 18 or newer and Python 3. Whisper (free, local) gives the word timings.
 
@@ -35,14 +37,25 @@ cp -R reel-editing-skills/skills/* ~/.claude/skills/
 
 </details>
 
+## What you can make
+
+| You need | Run |
+|---|---|
+| A demo of your product or website | `product-demo` |
+| How it works, a process or a framework | `explainer-video` |
+| A founder take or an opinion piece | `big-idea-video` |
+| Commentary on news in your industry | `news-reaction` |
+| A feature list, a service menu or a roundup | `toolkit-video` |
+| Results, a case study or this quarter's numbers | `animated-numbers` inside any of the above |
+
 ## How it works
 
-Every edit is one HTML page with a `seek(t)` function. It draws any moment of the reel from the time alone. A small script shoots every frame in Chrome and ffmpeg turns them into an H.264 file Instagram will not wash out.
+Every edit is one HTML page with a `seek(t)` function. It draws any moment of the video from the time alone. A small script shoots every frame in Chrome and ffmpeg turns them into an H.264 file no platform washes out.
 
-`reel-intake` sets up that page for you (the starter lives inside the skill). Every other skill edits one file in it, `reel.js`.
+`video-intake` sets up that page for you (the starter lives inside the skill). Every other skill edits one file in it, `video.js`.
 
 ```
-your recording → reel-intake → text-hook → an edit style → moves → reel-sound → reel-check → post (+ linkedin-cut)
+your recording → video-intake → brand-setup → opening-hook → a video type → moves → video-sound → video-check → every-format
 ```
 
 ## The skills
@@ -51,55 +64,54 @@ your recording → reel-intake → text-hook → an edit style → moves → ree
 
 | Skill | What it does |
 |---|---|
-| `reel-intake` | Checks the file, transcribes word by word, cuts pauses on true silence, sets up the reel folder |
-| `text-hook` | The two lines on screen from frame 0, in three tested looks |
+| `video-intake` | Checks the file, transcribes word by word, cuts pauses on true silence, sets up the project |
+| `brand-setup` | Reads your website's real styles. Your colours, font and logo go into every video |
+| `opening-hook` | The two lines on screen from frame 0, in three tested looks. They double as the thumbnail |
 
-### Edit styles (pick one per reel, or mix by beat)
+### Video types (pick one per video, or mix by beat)
 
-| Skill | What it does |
+| Skill | What it makes |
 |---|---|
-| `apple-motion-reel` | White canvas, one accent, one object per beat that changes on the word. My best motion reel |
-| `hero-motion-reel` | One big 3D object per beat that acts out the noun you say |
-| `real-page-reel` | The real website fills the top, one exact highlight lands on the word |
-| `footage-reel` | News over real footage, one clean run per spoken line |
-| `slash-command-reel` | A white prompt bar types each command and shows what it makes, every 2 seconds |
+| `product-demo` | Your real site or app on screen. One exact highlight lands on each feature as you name it |
+| `explainer-video` | Clean canvas, one object per point that changes on the word. My best motion video |
+| `big-idea-video` | One big 3D object per beat that acts out the idea you say |
+| `news-reaction` | Industry news over real footage, one clean run per spoken line |
+| `toolkit-video` | A prompt bar types each item and shows what it does, every 2 seconds |
 
 ### Moves
 
 | Skill | What it does |
 |---|---|
-| `zoom-through-cut` | Zooms into the thing you point at instead of a hard cut |
-| `word-highlight` | One box exactly on a word, measured off the pixels |
-| `animate-figures` | Counts, flip clocks and rings that land on the spoken number |
-| `comment-cta` | The native comment box types the keyword, then the DM card |
+| `zoom-cut` | Zooms into the thing you point at instead of a hard cut |
+| `word-highlight` | One box exactly on a word or a number, measured off the pixels |
+| `animated-numbers` | Counts, flip clocks and rings that land on the spoken number |
+| `call-to-action` | The right ending for each place: comment keyword, links in the post, or a book-a-call card |
 
-### Style briefs (for any motion graphic)
+### Looks
 
 | Skill | What it does |
 |---|---|
-| `apple-style-motion` | Light canvas, glass, springs. A brief for Claude Motion or Claude Code |
-| `stripe-style-motion` | Fintech look, fast snap ease, 16 ready payment moments |
-| `clone-brand-motion` | Reads any site's real stylesheets and turns them into a motion brief |
+| `apple-style` | Light canvas, glass, springs |
+| `stripe-style` | Fintech look, fast snap ease, 16 ready payment moments |
 
 ### Finish
 
 | Skill | What it does |
 |---|---|
-| `reel-sound` | Voice at one gain, music 12 dB under to the last frame, -14 LUFS |
-| `reel-check` | File format, safe zone, reading time, loudness and a contact sheet to look at |
-| `linkedin-cut` | The same build as a 4:5 LinkedIn video: captions on, -12 LUFS, links in the post |
+| `video-sound` | Voice at one gain, music 12 dB under to the last frame, the right loudness per platform |
+| `video-check` | File format, safe zones, reading time, loudness and a contact sheet to look at |
+| `every-format` | One build, four sizes: 9:16, 4:5, 1:1 and 16:9, each with that platform's rules |
 
 ## Rules every skill shares
 
 - The recording is the source of truth. Captions follow what was said.
 - One idea per beat. The scene changes every 3-5 seconds.
 - Every object fills its panel. Small things in big white space look cheap.
-- Captions sit in one white pill at the same height on every beat.
-- Nothing readable below y 1500 or right of x 950 near the Instagram buttons.
-- Size objects from `PANEL`, so every beat fits the 9:16 reel and the 4:5 LinkedIn video.
+- Captions sit in one pill at the same height on every beat, always on.
+- Size objects from `PANEL`, so every beat fits every size.
 - Real logos, real screenshots, real numbers. Never invent one.
 - Clone a style, never a brand.
 
 ## Licence
 
-MIT. Use it, change it, ship reels with it.
+MIT. Use it, change it, ship videos with it.

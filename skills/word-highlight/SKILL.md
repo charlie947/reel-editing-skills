@@ -25,8 +25,8 @@ One box, exactly on the word, at the moment you say it. Everything else goes qui
 
 ```
 Find the exact pixel box of "[PHRASE]" in [image.png]. Crop the region around it, threshold the dark text, and return the tight bounding box of the ink in image pixels.
-Pad 3px left and right and 5px top and bottom. Then scale that box to how the image is drawn in my reel (its displayed width / natural width).
-Draw it in beat [N] of reel.js: a 3px #0071e3 rounded outline, the rest of the image under rgba(255,255,255,.55) with the box left clear.
+Pad 3px left and right and 5px top and bottom. Then scale that box to how the image is drawn in my video (its displayed width / natural width).
+Draw it in beat [N] of video.js: a 3px #0071e3 rounded outline, the rest of the image under rgba(255,255,255,.55) with the box left clear.
 It fades in over 0.15s starting at the spoken word "[WORD]" from words.js.
 Then crop a still of that region at 2x and show me. The box must cover the phrase and nothing else.
 ```
