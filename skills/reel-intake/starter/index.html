@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Reel starter</title>
+<style>
+  :root {
+    --bg: #ffffff;        /* swap for your brand */
+    --ink: #1d1d1f;
+    --accent: #0071e3;
+    --font: "SF Pro Display", "Inter", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); font-family: var(--font); color: var(--ink); }
+  #reel { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+
+  /* face layer: one JPG per frame, cut from your recording */
+  #face { position: absolute; object-fit: cover; transition: none; }
+  #face.full  { left: 0; top: 0; width: 1080px; height: 1920px; border-radius: 0; }
+  #face.split { left: 40px; top: 1000px; width: 1000px; height: 860px; border-radius: 44px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.35); }
+  #face.off   { display: none; }
+
+  /* graphic stage: your beats draw in here */
+  #stage { position: absolute; left: 0; top: 0; width: 1080px; overflow: hidden; }
+  #stage.split { height: 1000px; }
+  #stage.full  { height: 1920px; }
+  #stage.off   { display: none; }
+
+  /* captions: one fixed line, same height on every beat */
+  /* a white pill in the middle of the frame, never on your chin, never at the bottom */
+  #cap { position: absolute; left: 0; right: 0; top: 962px; text-align: center; pointer-events: none; z-index: 20; }
+  #cap .pill { display: inline-block; background: #fff; color: var(--ink); border-radius: 999px; padding: 14px 30px; font-size: 52px; font-weight: 650; letter-spacing: -0.01em; line-height: 1.1; box-shadow: 0 10px 30px -12px rgba(0,0,0,.35); }
+  #cap .pill:empty { display: none; }
+  #cap span { display: inline-block; margin: 0 .1em; }
+
+  /* text hook: frame 0, two lines, over the face */
+  #hook { position: absolute; left: 60px; right: 60px; top: 260px; text-align: center; z-index: 30; }
+  #hook .box { display: inline-block; background: #fff; color: #000; border-radius: 22px; padding: 26px 34px; font-size: 72px; font-weight: 750; line-height: 1.1; white-space: nowrap; letter-spacing: -0.02em; box-shadow: 0 20px 50px -20px rgba(0,0,0,.4); }
+</style>
+</head>
+<body>
+<div id="reel">
+  <img id="face" alt="">
+  <div id="stage"></div>
+  <div id="hook"><div class="box"></div></div>
+  <div id="cap"></div>
+</div>
+<audio id="audio" src="cut-audio.wav" preload="auto"></audio>
+<script src="words.js"></script>
+<script src="reel.js"></script>
+<script>
+// ---------- helpers every beat can use ----------
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const prog = (t, a, b) => clamp((t - a) / (b - a));              // 0..1 between a and b
+const easeOut = p => 1 - Math.pow(1 - p, 3);                      // snaps in, settles
+const spring = p => 1 - Math.exp(-6 * p) * Math.cos(9 * p * (1 - p)); // settle, tiny overshoot
+const wordAt = (w) => (WORDS.find(x => x.w.toLowerCase().replace(/[^a-z0-9]/g, '') === w.toLowerCase()) || {}).s;
+
+// ---------- the engine: everything is worked out from t alone ----------
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(6, '0');
+
+function captionAt(t) {
+  // groups of up to 4 words, a new group starts after a pause or every 4 words
+  const groups = []; let g = [];
+  WORDS.forEach((w, i) => {
+    const gap = i ? w.s - WORDS[i - 1].e : 0;
+    if (g.length && (g.length >= REEL.capWords || gap > 0.35)) { groups.push(g); g = []; }
+    g.push(w);
+  });
+  if (g.length) groups.push(g);
+  const cur = groups.find(gr => t >= gr[0].s - 0.05 && t < (gr[gr.length - 1].e + 0.35));
+  return cur || [];
+}
+
+function seek(t) {
+  const beat = REEL.beats.find(b => t >= b.start && t < b.end) || REEL.beats[REEL.beats.length - 1];
+  const layout = beat.layout;                                    // 'face' | 'split' | 'full'
+  const face = $('face'), stage = $('stage');
+
+  // face frame
+  const f = Math.min(REEL.faceFrames, Math.max(1, Math.round(t * REEL.fps) + 1));
+  const src = 'face/' + pad(f) + '.jpg';
+  if (face.getAttribute('src') !== src) face.setAttribute('src', src);
+  face.className = layout === 'face' ? 'full' : layout === 'split' ? 'split' : 'off';
+
+  // stage: the beat draws itself from its own local time
+  stage.className = layout === 'face' ? 'off' : layout;
+  if (stage.dataset.beat !== String(REEL.beats.indexOf(beat))) {
+    stage.innerHTML = beat.html || '';
+    stage.dataset.beat = REEL.beats.indexOf(beat);
+  }
+  if (beat.draw) beat.draw(t - beat.start, stage, t);
+
+  // text hook from frame 0
+  const hook = $('hook');
+  const on = t < REEL.hookEnd;
+  hook.style.display = on ? 'block' : 'none';
+  if (on) hook.querySelector('.box').innerHTML = REEL.hook.join('<br>');
+
+  // captions: each word fades in from blur as it is spoken
+  const cap = $('cap');
+  const words = on ? [] : captionAt(t);
+  cap.innerHTML = '<div class="pill">' + words.map(w => {
+    const p = easeOut(prog(t, w.s, w.s + 0.22));
+    return `<span style="opacity:${p};filter:blur(${(1 - p) * 7}px)">${w.w}</span>`;
+  }).join('') + '</div>';
+  return Promise.all([...document.images].filter(i => i.getAttribute('src')).map(i => i.decode().catch(() => {})));
+}
+window.seek = seek;
+
+// open normally = play with sound. ?render = wait for seek(t).
+if (!location.search.includes('render')) {
+  const a = $('audio'); let t0 = performance.now();
+  document.body.addEventListener('click', () => { a.currentTime = 0; a.play(); t0 = performance.now(); });
+  (function loop() { const t = ((performance.now() - t0) / 1000) % REEL.duration; seek(a.paused ? t : a.currentTime); requestAnimationFrame(loop); })();
+} else { seek(Number(new URLSearchParams(location.search).get('t')) || 0); }  // ?render&t=3.2 opens one frame
+</script>
+</body>
+</html>
