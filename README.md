@@ -1,11 +1,11 @@
 <h1 align="center">Video Editing Skill Pack</h1>
 
 <p align="center">
-  <strong>18 skills that turn a to-camera recording into a polished motion video with Claude Code. One build, every platform. Every frame is code.</strong>
+  <strong>20 skills that turn a to-camera recording into a polished motion video with Claude Code. One build, every platform. Every frame is code.</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/skills-18-0071E3?style=flat-square&labelColor=1d1d1f" alt="18 skills">
+  <img src="https://img.shields.io/badge/skills-20-0071E3?style=flat-square&labelColor=1d1d1f" alt="20 skills">
   <img src="https://img.shields.io/badge/runs_in-Claude_Code_%C2%B7_Codex-0071E3?style=flat-square&labelColor=1d1d1f" alt="Runs in Claude Code and Codex">
   <a href="LICENSE"><img src="https://img.shields.io/badge/licence-MIT-FFFFFF?style=flat-square&labelColor=1d1d1f" alt="MIT licence"></a>
 </p>
@@ -14,7 +14,7 @@
 
 I edit my videos with Claude Code now. No CapCut, no Premiere, no editor. Claude cuts the take, builds every motion graphic as code in your brand, draws each frame and renders the MP4. One build gives you a 9:16 reel, a 4:5 LinkedIn video, a 1:1 ad and a 16:9 video for YouTube, your website or a sales email.
 
-These 18 skills are the steps I use, with the rules that came out of real drafts I threw away.
+These 20 skills are the steps I use, with the rules that came out of real drafts I threw away.
 
 ## Install
 
@@ -24,7 +24,7 @@ npx skills add charlie947/reel-editing-skills
 
 Then open Claude Code in an empty folder and run `video-intake` with your recording. Run `brand-setup` once with your website.
 
-You need `ffmpeg`, Node 18 or newer and Python 3. Whisper (free, local) gives the word timings.
+You need `ffmpeg`, Node 18 or newer and Python 3. Whisper (free, local) gives the word timings. `behind-my-head` and `tier-list` also cut you out of the frame with RobustVideoMatting (free, local, `pip install torch torchvision`). The model downloads once and is GPL-3.0 licensed.
 
 <details>
 <summary><strong>Manual copy</strong></summary>
@@ -44,6 +44,7 @@ cp -R reel-editing-skills/skills/* ~/.claude/skills/
 | A demo of your product or website | `product-demo` |
 | How it works, a process or a framework | `explainer-video` |
 | A founder take or an opinion piece | `big-idea-video` |
+| A ranking, best to worst | `tier-list` |
 | Commentary on news in your industry | `news-reaction` |
 | A feature list, a service menu or a roundup | `toolkit-video` |
 | Results, a case study or this quarter's numbers | `animated-numbers` inside any of the above |
@@ -79,6 +80,7 @@ your recording → video-intake → brand-setup → opening-hook → a video typ
 | `news-reaction` | Industry news over real footage, one clean run per spoken line |
 | `toolkit-video` | A prompt bar types each item and shows what it does, every 2 seconds |
 | `call-clips` | A long recording you already have into the 3 to 5 best short clips, ranked, with hooks and captions |
+| `tier-list` | An S to F tier list. Each item drops into its row on the word, your head breaks out of the card below |
 
 ### Moves
 
@@ -87,6 +89,7 @@ your recording → video-intake → brand-setup → opening-hook → a video typ
 | `zoom-cut` | Zooms into the thing you point at instead of a hard cut |
 | `word-highlight` | One box exactly on a word or a number, measured off the pixels |
 | `animated-numbers` | Counts, flip clocks and rings that land on the spoken number |
+| `behind-my-head` | Cuts you out and puts a real page or a big number behind you, landing on the word |
 | `call-to-action` | The right ending for each place: comment keyword, links in the post, or a book-a-call card |
 
 ### Looks
