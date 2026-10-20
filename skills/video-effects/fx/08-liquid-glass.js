@@ -35,7 +35,7 @@
           <feColorMatrix in="gx" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1" result="rx"/><feColorMatrix in="gy" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1" result="ry"/>
           <feComposite in="rx" in2="ry" operator="arithmetic" k2="1" k3="1" result="m"/>
           <feDisplacementMap in="SourceGraphic" in2="m" scale="40" xChannelSelector="R" yChannelSelector="G" result="d"/></filter></svg>
-        <div class="fx8-sd"></div><div class="fx8-g" style="filter:url(#${id}-w)"><div class="fx8-in">${himView(PT(8), 'deco')}</div><div class="fx8-sh"></div></div>
+        <div class="fx8-sd"></div><div class="fx8-g" style="filter:url(#${id}-w)"><div class="fx8-in" data-noface>${himView(PT(8), 'deco')}</div><div class="fx8-sh"></div></div>
         ${SLOT}<div class="fx8-fr" style="backdrop-filter:url(#${id}-b) blur(4px) brightness(1.05)"></div><div class="fx8-fr" style="backdrop-filter:url(#${id}-b) blur(4px) brightness(1.05)"></div><div class="fx8-fr" style="backdrop-filter:url(#${id}-b) blur(4px) brightness(1.05)"></div><div class="fx8-fr" style="backdrop-filter:url(#${id}-b) blur(4px) brightness(1.05)"></div><div class="fx8-fr" style="backdrop-filter:blur(2.5px)"></div><div class="fx8-fr" style="backdrop-filter:blur(2.5px)"></div><div class="fx8-fr" style="backdrop-filter:blur(2.5px)"></div><div class="fx8-fr" style="backdrop-filter:blur(2.5px)"></div><div class="fx8-fr" style="backdrop-filter:blur(1.2px)"></div><div class="fx8-fr" style="backdrop-filter:blur(1.2px)"></div><div class="fx8-fr" style="backdrop-filter:blur(1.2px)"></div><div class="fx8-fr" style="backdrop-filter:blur(1.2px)"></div><div class="fx8-r"><div class="fx8-sp"></div><div class="fx8-sw"></div></div></div>
         <style>
           .fx8-g{position:absolute;overflow:hidden;isolation:isolate}.fx8-sd{position:absolute}
@@ -69,7 +69,7 @@
           .forEach(([x, y, w, h, br], j) => Object.assign(fr[i * 4 + j].style, { display: box.display, left: n(x), top: n(y), width: n(w), height: n(Math.max(h, 0)), borderRadius: br })); }
       const sw = P(t, .56, .34), sx = mix(-.55, 1.25, eio(sw));   // a soft specular sweeps across the glass once
       Object.assign(one(cam, '.fx8-sw').style, { left: (sx * 100).toFixed(1) + '%', transform: 'rotate(18deg)', opacity: (Math.sin(Math.PI * sw)).toFixed(3) });
-      // inside the glass: his frame magnified about the glass centre, with a slow liquid refraction that calms as the drop settles
+      // inside the glass: your frame magnified (data-noface: the one-face rule ignores it, since the glass stays under your mouth) about the glass centre, with a slow liquid refraction that calms as the drop settles
       const mag = 1.14, inn = one(cam, '.fx8-in');
       inn.style.transform = `translate(${(-x0).toFixed(1)}px,${(-y0).toFixed(1)}px) translate(${g.c[0].toFixed(1)}px,${g.c[1].toFixed(1)}px) scale(${mag}) translate(${(-g.c[0]).toFixed(1)}px,${(-g.c[1]).toFixed(1)}px)`;
       // edge lensing: the slope of the blurred pane shape bends what is under the rim, like a thick lens
