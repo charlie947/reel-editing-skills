@@ -19,7 +19,7 @@ The voice carries the reel. The music holds it together, at one level, all the w
 - **One bed level to the last frame.** No dips, no fade in the middle, no early fade-out.
 - **A take that is too short gets looped on whole phrases.** Cut it before its own fade, repeat a full phrase, 0.06s crossfade at each join.
 - **Silent under any clip with its own sound** (an ad, a demo with audio). Fade out 0.4s before it and back in after.
-- **Loudness about -14 LUFS** for Instagram and TikTok. True peak -1.5 dBTP or lower.
+- **Loudness about -14 LUFS** for Instagram and TikTok, **-12 LUFS for the LinkedIn cut** (swap `I=-14` for `I=-12` in Step 3). True peak -1.5 dBTP or lower.
 - **No whooshes or pops** unless the brand asks for them.
 
 ## Step 2: Loop the music to length (paste into Claude Code)

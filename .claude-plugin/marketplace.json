@@ -2,14 +2,14 @@
   "name": "reel-editing-skills",
   "owner": { "name": "Charlie Hills", "url": "https://github.com/charlie947" },
   "metadata": {
-    "description": "16 skills that edit Instagram reels with Claude Code: Apple-style motion, text hooks, real page demos, slash command montages, sound and a pre-post check.",
+    "description": "17 skills that edit motion videos for Instagram and LinkedIn with Claude Code: Apple-style motion, text hooks, real page demos, slash command montages, sound and a pre-post check.",
     "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "reel-editing-skills",
       "source": "./",
-      "description": "Edit talking-head reels with Claude Code. One starter page, 16 skills.",
+      "description": "Edit talking-head motion videos for Instagram and LinkedIn with Claude Code. One starter page, 17 skills.",
       "version": "1.0.0",
       "author": { "name": "Charlie Hills" },
       "license": "MIT",

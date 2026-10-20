@@ -9,6 +9,8 @@ One big 3D object per beat, acting out the noun you say. This is the system behi
 
 **Before you start:** run `reel-intake` and `text-hook`. This builds on `apple-motion-reel`'s look (white, one accent, pill captions).
 
+**LinkedIn too.** The same build makes the LinkedIn video. Size objects from `PANEL`, then run `linkedin-cut` (4:5, captions on, -12 LUFS).
+
 ## Step 1: Ask for three things, then wait
 
 1. **The cut transcript** with word timings.

@@ -9,10 +9,11 @@
     --ink: #1d1d1f;
     --accent: #0071e3;
     --font: "SF Pro Display", "Inter", system-ui, sans-serif;
+    --W: 1080px; --H: 1920px;   /* Instagram 9:16. LinkedIn (?li) switches to 4:5 below */
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); font-family: var(--font); color: var(--ink); }
-  #reel { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+  html, body { width: var(--W); height: var(--H); overflow: hidden; background: var(--bg); font-family: var(--font); color: var(--ink); }
+  #reel { position: relative; width: var(--W); height: var(--H); overflow: hidden; background: var(--bg); }
 
   /* face layer: one JPG per frame, cut from your recording */
   #face { position: absolute; object-fit: cover; transition: none; }
@@ -35,6 +36,15 @@
 
   /* text hook: frame 0, two lines, over the face */
   #hook { position: absolute; left: 60px; right: 60px; top: 260px; text-align: center; z-index: 30; }
+  /* LinkedIn 4:5 (1080 x 1350): motion on top, caption at the seam, face card below */
+  html.li { --H: 1350px; }
+  html.li #face.full  { height: 1350px; }
+  html.li #face.split { left: 60px; top: 700px; width: 960px; height: 610px; border-radius: 40px; }
+  html.li #stage.split { height: 620px; }
+  html.li #stage.full  { height: 1350px; }
+  html.li #cap  { top: 618px; }
+  html.li #hook { top: 150px; }
+
   #hook .box { display: inline-block; background: #fff; color: #000; border-radius: 22px; padding: 26px 34px; font-size: 72px; font-weight: 750; line-height: 1.1; white-space: nowrap; letter-spacing: -0.02em; box-shadow: 0 20px 50px -20px rgba(0,0,0,.4); }
 </style>
 </head>
@@ -46,6 +56,13 @@
   <div id="cap"></div>
 </div>
 <audio id="audio" src="cut-audio.wav" preload="auto"></audio>
+<script>
+// which cut: Instagram 9:16 by default, LinkedIn 4:5 with ?li
+const LI = new URLSearchParams(location.search).has('li');
+document.documentElement.classList.toggle('li', LI);
+// size every object from PANEL, so one beat renders both cuts
+window.PANEL = LI ? { w: 1080, split: 620, full: 1350 } : { w: 1080, split: 1000, full: 1920 };
+</script>
 <script src="words.js"></script>
 <script src="reel.js"></script>
 <script>
@@ -114,7 +131,7 @@ if (!location.search.includes('render')) {
   const a = $('audio'); let t0 = performance.now();
   document.body.addEventListener('click', () => { a.currentTime = 0; a.play(); t0 = performance.now(); });
   (function loop() { const t = ((performance.now() - t0) / 1000) % REEL.duration; seek(a.paused ? t : a.currentTime); requestAnimationFrame(loop); })();
-} else { seek(Number(new URLSearchParams(location.search).get('t')) || 0); }  // ?render&t=3.2 opens one frame
+} else { seek(Number(new URLSearchParams(location.search).get('t')) || 0); }  // ?render&t=3.2 opens one frame, add &li for LinkedIn
 </script>
 </body>
 </html>

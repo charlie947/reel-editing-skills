@@ -9,6 +9,8 @@ When the reel is about a real site or app, show the real thing. Not a drawing of
 
 **Before you start:** run `reel-intake` and `text-hook`.
 
+**LinkedIn too.** The same build makes the LinkedIn video. Size objects from `PANEL`, then run `linkedin-cut` (4:5, captions on, -12 LUFS).
+
 ## Step 1: Ask for three things, then wait
 
 1. **The pages,** one per spoken line, as full-size screenshots (or let Claude capture them). True ratio, never stretched.

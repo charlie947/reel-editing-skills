@@ -9,6 +9,8 @@ For a real event with real footage. The footage tells the story, so the rules ar
 
 **Before you start:** run `reel-intake` and `text-hook` (look A, launch title, for news).
 
+**LinkedIn too.** The same build makes the LinkedIn video. Size objects from `PANEL`, then run `linkedin-cut` (4:5, captions on, -12 LUFS).
+
 ## Step 1: Ask for three things, then wait
 
 1. **The footage,** the original files you have the right to use. Note the source of each.

@@ -7,6 +7,8 @@ description: Build the comment-keyword call to action for the end of a reel, a c
 
 The ending that turns views into comments. It sits over the last 2-3 seconds. It never adds extra seconds.
 
+**On LinkedIn, skip this skill.** A comment-for-the-link ask reads as bait there. The `linkedin-cut` ends on the payoff and the links go in the post text.
+
 ## Step 1: Ask for three things, then wait
 
 1. **The keyword,** 4 or 5 letters, one word. Short words get typed. Long ones get skipped.

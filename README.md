@@ -1,18 +1,18 @@
 <h1 align="center">Reel Editing Skill Pack</h1>
 
 <p align="center">
-  <strong>16 skills that edit Instagram reels with Claude Code. Every frame is code.</strong>
+  <strong>17 skills that edit motion videos for Instagram and LinkedIn with Claude Code. Every frame is code.</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/skills-16-0071E3?style=flat-square&labelColor=1d1d1f" alt="16 skills">
+  <img src="https://img.shields.io/badge/skills-17-0071E3?style=flat-square&labelColor=1d1d1f" alt="17 skills">
   <img src="https://img.shields.io/badge/runs_in-Claude_Code_%C2%B7_Codex-0071E3?style=flat-square&labelColor=1d1d1f" alt="Runs in Claude Code and Codex">
   <a href="LICENSE"><img src="https://img.shields.io/badge/licence-MIT-FFFFFF?style=flat-square&labelColor=1d1d1f" alt="MIT licence"></a>
 </p>
 
 ---
 
-I edit my reels with Claude Code now. No CapCut, no Premiere. Claude cuts the take, builds every motion graphic as code, draws each frame and renders an MP4 that is ready for Instagram. These 16 skills are the steps I use, with the rules that came out of real drafts I threw away.
+I edit my reels with Claude Code now. No CapCut, no Premiere. Claude cuts the take, builds every motion graphic as code, draws each frame and renders two MP4s from one build: a 9:16 reel for Instagram and a 4:5 video for LinkedIn. These 17 skills are the steps I use, with the rules that came out of real drafts I threw away.
 
 ## Install
 
@@ -42,7 +42,7 @@ Every edit is one HTML page with a `seek(t)` function. It draws any moment of th
 `reel-intake` sets up that page for you (the starter lives inside the skill). Every other skill edits one file in it, `reel.js`.
 
 ```
-your recording → reel-intake → text-hook → an edit style → moves → reel-sound → reel-check → post
+your recording → reel-intake → text-hook → an edit style → moves → reel-sound → reel-check → post (+ linkedin-cut)
 ```
 
 ## The skills
@@ -87,6 +87,7 @@ your recording → reel-intake → text-hook → an edit style → moves → ree
 |---|---|
 | `reel-sound` | Voice at one gain, music 12 dB under to the last frame, -14 LUFS |
 | `reel-check` | File format, safe zone, reading time, loudness and a contact sheet to look at |
+| `linkedin-cut` | The same build as a 4:5 LinkedIn video: captions on, -12 LUFS, links in the post |
 
 ## Rules every skill shares
 
@@ -95,6 +96,7 @@ your recording → reel-intake → text-hook → an edit style → moves → ree
 - Every object fills its panel. Small things in big white space look cheap.
 - Captions sit in one white pill at the same height on every beat.
 - Nothing readable below y 1500 or right of x 950 near the Instagram buttons.
+- Size objects from `PANEL`, so every beat fits the 9:16 reel and the 4:5 LinkedIn video.
 - Real logos, real screenshots, real numbers. Never invent one.
 - Clone a style, never a brand.
 

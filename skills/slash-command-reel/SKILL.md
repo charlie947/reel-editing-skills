@@ -9,6 +9,8 @@ Show a pack of commands the fastest way possible: type it, see what it makes, ne
 
 **Before you start:** each command needs a real result to show (a clip or a still). Collect them first. A command with nothing to show stays out of the montage and goes on the end grid only.
 
+**LinkedIn too.** The same build makes the LinkedIn video. Size objects from `PANEL`, then run `linkedin-cut` (4:5, captions on, -12 LUFS).
+
 ## Step 1: Ask for four things, then wait
 
 1. **The commands,** in order, each with a one-line description (under 50 characters).

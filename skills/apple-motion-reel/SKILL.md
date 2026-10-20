@@ -9,6 +9,8 @@ This is the edit style of my best motion reel: 25,998 plays, about 11x my normal
 
 **Before you start:** run `reel-intake` (cut take, `words.js`, face frames, starter). Run `text-hook` for the first 2 seconds.
 
+**LinkedIn too.** The same build makes the LinkedIn video. Size objects from `PANEL`, then run `linkedin-cut` (4:5, captions on, -12 LUFS).
+
 ## Step 1: Ask for three things, then wait
 
 1. **The cut transcript** with word timings (from `reel-intake`).

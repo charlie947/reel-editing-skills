@@ -13,7 +13,7 @@ Run this on every finished file. It catches the faults people spot in the first 
 ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,pix_fmt,color_range,nb_frames,r_frame_rate -show_entries format=duration -of default=nw=1 reel.mp4
 ```
 
-Pass: `h264`, `1080` x `1920`, `yuv420p`, `color_range=tv`. Frames = duration x fps. A truncated render looks fine on frame 1. If you see `hevc` or `color_range=pc`, export again:
+Pass: `h264`, `1080` x `1920` (LinkedIn cut: `1080` x `1350`, file `reel-linkedin.mp4`), `yuv420p`, `color_range=tv`. Frames = duration x fps. A truncated render looks fine on frame 1. If you see `hevc` or `color_range=pc`, export again:
 
 ```
 ffmpeg -i reel.mp4 -c:v libx264 -profile:v high -crf 18 -pix_fmt yuv420p -vf "scale=1080:1920:out_range=tv,format=yuv420p" -color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709 -c:a aac -b:a 192k -movflags +faststart reel-ig.mp4
@@ -46,6 +46,8 @@ Open both and read every tile. Then watch it once at full size with sound.
 | 12 | Ending | The call to action holds to the last frame, keyword flow live |
 
 Any fail: fix it and check again from Step 1.
+
+**LinkedIn cut:** lines 3, 11 and 12 change. Safe zone: keep the caption band y 590-700 clear of objects. Sound: about -12 LUFS. Ending: no comment ask, the links go in the post text. Add one line: frame 0 reads as a still with the sound off.
 
 ## Step 4: Draw the safe zone
 
