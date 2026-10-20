@@ -14,7 +14,7 @@
   const corner = (T, u, v) => { // u across the wall, v along depth (0 at the opening side of the cell)
     const z = ZE - (T.k + v) * TL, a = -1 + 2 * (T.i + u) / T.n;
     return T.wl === 0 ? [-Wt, a * Ht, z] : T.wl === 1 ? [Wt, a * Ht, z] : T.wl === 2 ? [a * Wt, -Ht, z] : [a * Wt, Ht, z]; };
-  const camZ = (t, d) => { const u = ez(P(t, .02, .34)) * (1 - .06 * ez(P(t, .36, .4))), w = eio(P(t, d - .44, .44)); return ZA - DZ * u * (1 - w); };
+  const camZ = (t, d) => { const u = (FACEF ? eio(P(t, 0, .46)) : ez(P(t, .02, .34))) * (1 - .06 * ez(P(t, .36, .4))), w = eio(P(t, d - .44, .44)); return ZA - DZ * u * (1 - w); };
   const Sof = zc => S11 * F / (ZE - zc);
   function hom(q, w, h) { const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = q, dx1 = x1 - x2, dx2 = x3 - x2, dx3 = x0 - x1 + x2 - x3, dy1 = y1 - y2, dy2 = y3 - y2, dy3 = y0 - y1 + y2 - y3;
     const den = dx1 * dy2 - dx2 * dy1, g = (dx3 * dy2 - dx2 * dy3) / den, hh = (dx1 * dy3 - dx3 * dy1) / den;

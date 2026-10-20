@@ -28,3 +28,38 @@
     winIn: (t, d) => { const { dv, dl } = TM(d); return P(t, dv + .3 * dl, .25 * dl); },   // late: the ring is already wide when the next shot shows
   };
 })();
+
+// Feed cut F (20/10/2026 23:36, Charlie 23:34: "portal one looks really cheap on the current reel versus on the infographic"):
+// the LinkedIn grid Portal, copied in and scaled to the face card. A glowing blue ring opens on his face. Inside it a smaller
+// him turns in a blue vortex. Then we dive through the ring: the inner him grows to fill the card at exactly his plain view,
+// so the next effect (which opens on him) takes over with no jump. Cuts A and B keep the ring above.
+if (FACEF) (() => {
+  const C = [Z.w / 2, BEYE + 100], R = 205, K0 = .42;
+  const TM = d => { const dv = Math.max(.5, d - .5); return { dv, dl: d - dv }; };
+  const rad = t => R * ez(P(t, .02, .3)), E = (t, d) => { const { dv, dl } = TM(d); return ez(P(t, dv, dl)); };
+  const vx = [0, 60, 120, 180, 240, 300].map(r => `<path transform="rotate(${r})" d="${(() => { let d = ''; for (let j = 0; j <= 40; j++) { const t = j / 40, a = t * 3.2, rr = 55 + 45 * t; d += (j ? 'L' : 'M') + (rr * Math.cos(a)).toFixed(1) + ',' + (rr * Math.sin(a)).toFixed(1); } return d; })()}" fill="none" stroke="rgba(170,215,255,.7)" stroke-width="3.5" stroke-linecap="round"/>`).join('');
+  FX[4] = {
+    name: NAMES[3], row: 3, bg: 'floor', Send: .7 * Z.w / (R * .9),
+    wr(t, d) { return mix(rad(t), 1.02 * ZD / this.Send, E(t, d)); },
+    html() { return `<style>
+      .p4w{position:absolute;border-radius:50%;overflow:hidden;background:#0a2a66}
+      .p4c{position:absolute;left:0;top:0;width:${Z.w}px;height:${Z.h}px;transform-origin:0 0}
+      .p4t{position:absolute;inset:0;pointer-events:none;border-radius:50%;background:radial-gradient(circle,rgba(0,40,110,0) 0,rgba(0,40,110,0) 55%,rgba(0,80,184,.55) 80%,rgba(4,26,80,.92) 100%)}
+      .p4v{position:absolute;inset:0;pointer-events:none;width:100%;height:100%;mix-blend-mode:screen}
+      .p4r{position:absolute;border-radius:50%;pointer-events:none;box-shadow:0 0 0 6px #0071E3,0 0 0 10px rgba(127,196,255,.95),0 0 40px 16px rgba(0,113,227,.6),inset 0 0 30px 8px rgba(127,196,255,.6)}
+      </style>${himView(PT(4), 'me')}<div class="p4w"><div class="p4c">${himView(PT(4), 'me')}</div><div class="p4t"></div><svg class="p4v" style="pointer-events:none" viewBox="-100 -100 200 200">${vx}</svg></div>${SLOT}<div class="p4r"></div>`; },
+    camera(t, d) { const e = E(t, d); return e > 0 ? { a: C, f: [mix(C[0], ZC[0], e), mix(C[1], ZC[1], e)], S: Math.pow(this.Send, e) } : null; },
+    seek(cam, t, d) {
+      const e = E(t, d), S = Math.pow(this.Send, e), r = Math.max(rad(t), this.wr(t, d)), fade = 1 - P(e, .82, .16);
+      const w = one(cam, '.p4w'), rim = one(cam, '.p4r'), c = one(cam, '.p4c'), tn = one(cam, '.p4t'), v = one(cam, '.p4v');
+      const box = (el, q) => Object.assign(el.style, { left: (C[0] - q).toFixed(1) + 'px', top: (C[1] - q).toFixed(1) + 'px', width: (2 * q).toFixed(1) + 'px', height: (2 * q).toFixed(1) + 'px', display: q > .5 ? 'block' : 'none' });
+      box(w, r); box(rim, r + 5); rim.style.opacity = fade.toFixed(3);
+      // the inner him: K0 of his view about the ring centre, growing to exactly his plain view on screen as the dive ends
+      const k = K0 + (1 - K0) * eio(e), m = k / S, ox = C[0] - (C[0] - r) + e * (C[0] - ZC[0]) / S - m * C[0], oy = C[1] - (C[1] - r) + e * (C[1] - ZC[1]) / S - m * C[1];
+      c.style.transform = `translate(${ox.toFixed(2)}px,${oy.toFixed(2)}px) scale(${m.toFixed(5)})`;
+      tn.style.opacity = fade.toFixed(3); v.style.opacity = (1 - P(t, .45, .5)).toFixed(3); v.style.transform = `rotate(${(-250 * t).toFixed(1)}deg)`;
+    },
+    win(t, d) { return { c: C, r: this.wr(t, d) }; },
+    winIn: (t, d) => P(t, d - .133, .133),
+  };
+})();

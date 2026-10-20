@@ -31,3 +31,5 @@ FX[16] = (() => {
     winIn: (t, d) => P(t, d - .17, .12),
   };
 })();
+// Feed cut F (21/10/2026): no dive at the end; Pull-Back Reveal dissolves in over the last 4 frames (join 16-17 was 40.5).
+if (FACEF) Object.assign(FX[16], { noDive: true, fullWin: true });

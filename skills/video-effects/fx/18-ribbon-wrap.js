@@ -64,7 +64,7 @@ FX[18] = (() => {
       const W = tagC(t), o = tagIn(t), pad = TW * .08, top = TW * .26;
       const tg = one(cam, '.tg'); Object.assign(tg.style, { left: (W[0] - TW / 2 - pad).toFixed(1) + 'px', top: (W[1] - TH / 2 - top).toFixed(1) + 'px', width: (TW + 2 * pad).toFixed(1) + 'px', height: (TH + pad + top).toFixed(1) + 'px', opacity: o.toFixed(3) });
       q(tg, 'i').style.top = (top * .28).toFixed(1) + 'px';
-      Object.assign(one(cam, '.tc').style, { left: (W[0] - TW / 2).toFixed(1) + 'px', top: (W[1] - TH / 2).toFixed(1) + 'px', width: TW.toFixed(1) + 'px', height: TH.toFixed(1) + 'px', opacity: (o * (1 - this.winIn(t, d))).toFixed(3) });   // the number hands over to the next shot, never shows through it
+      Object.assign(one(cam, '.tc').style, { left: (W[0] - TW / 2).toFixed(1) + 'px', top: (W[1] - TH / 2).toFixed(1) + 'px', width: TW.toFixed(1) + 'px', height: TH.toFixed(1) + 'px', opacity: (o * (1 - (FACEF ? P(t, DV, .3 * Math.max(.12, d - .03 - DV)) : this.winIn(t, d)))).toFixed(3) });   // F: the tag clears as the dive starts, never a white card over his face   // the number hands over to the next shot, never shows through it
       const ey = [W[0], W[1] - TH / 2 - top * .62];
       const st = one(cam, '.st'); st.setAttribute('d', `M${HP[0].toFixed(1)} ${HP[1].toFixed(1)} Q${((HP[0] + ey[0]) / 2 + 6).toFixed(1)} ${((HP[1] + ey[1]) / 2 + 14).toFixed(1)} ${ey[0].toFixed(1)} ${ey[1].toFixed(1)}`); st.style.opacity = o.toFixed(3);
     },
@@ -72,3 +72,5 @@ FX[18] = (() => {
     winIn: (t, d) => { const dl = Math.max(.12, d - .03 - DV); return P(t, DV + .45 * dl, .3 * dl); },   // late: the tag is already big when the next shot shows
   };
 })();
+// Feed cut F (21/10/2026, Charlie: "random box-like phone thing"): no gift tag, no "19" card, no dive. Zoom-Through dissolves in over 4 frames.
+if (FACEF) { const sk = FX[18].seek; Object.assign(FX[18], { noDive: true, fullWin: true, seek(cam, t, d) { sk.call(this, cam, t, d); own(cam, '.tg,.tc').forEach(e => e.style.display = 'none'); } }); }

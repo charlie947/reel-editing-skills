@@ -69,36 +69,29 @@ function sceneDOM(s, next, id, inner) {
   const emb = inner || !next ? '' : `<div class="Z emb"><div class="Z ebg">${ebx(next.bg)}${stageZ(next.bg)}</div>${sceneDOM(next, null, id + 'n', true)}</div>`;
   return `<div class="Z cam">${s.html(id, inner).replace(SLOT, emb)}</div>`;
 }
-// Single-face rule (REEL.cut F, always on here): two faces never cross-fade at a hand-off.
-// At a hand-off the outgoing views of him (every img[data-eb] of THIS scene, room plates too) fade out over the first half of the
-// window's fade-in and the incoming window shows only over the second half, so two faces never cross-fade. Skipped when the window
-// is the whole zone at identity (Send 1: both faces sit in the same place) and for scenes that set seq:false (they manage it).
-// Any outgoing view of him whose rendered size passes 1.04x his talking-head size fades out by 1.12x, so a dive never blows his face up.
 const FACEF = ((window.REEL || {}).cut || '') === 'F';
 function runScene(s, root, t, d, next) {
   const cam = root.querySelector(':scope > .cam');
-  const c = s.camera ? s.camera(t, d) : null;
+  // Feed cut F (21/10/2026 00:20, Charlie: "it zooms here, then goes nowhere"): no dive that crops his face. Any camera push in (S > 1) is dropped
+  // on the effects that opt in (noDive): Title Orbit, Lens, Ribbon. Every other camera plays as at 20:36.
+  const c0 = s.camera ? s.camera(t, d) : null, c = FACEF && s.noDive && c0 && c0.S > 1.001 ? null : c0;
   cam.style.transformOrigin = '0 0'; cam.style.transform = c ? camT(c.a, c.f, c.S) : 'none';
-  const faces = FACEF && next ? own(cam, 'img[data-eb]').filter(m => !m.closest('[data-noface]')) : [];
-  faces.forEach(m => { if (m.dataset.o0 === undefined) m.dataset.o0 = m.style.opacity; m.style.opacity = m.dataset.o0; });   // pure: back to the template value before the scene sets its own
   s.seek(cam, t, d);
   const emb = one(cam, '.emb');
-  // one face at a time: the window's copy of you takes over in one frame (a cross-fade would show two of you, or none)
-  const seq = FACEF && s.seq !== false && s.Send !== 1 && faces.length > 0;
-  let swap = false;
-  if (seq) { const fw = root.closest('.f').getBoundingClientRect().width / 1080;
-    const big = faces.some(m => +(m.style.opacity || 1) > 0 && m.getBoundingClientRect().width / (1080 * BS * fw) > 1.04);
-    swap = big || (emb && s.winIn ? s.winIn(t, d) : 1) > 0; }
+  // Feed cut F (20/10/2026 23:40, Charlie: "the overall effects were stronger" at 20:36): every effect moves exactly as at 20:36.
+  // Only the hand-off changes: while a view of him is on the card, the next shot waits and dissolves in over the last 4 frames
+  // to the seam (no double head, no one-frame pop). When the effect itself has hidden him, the next shot shows as designed.
+  const faces = FACEF && next && s.seq !== false && s.Send !== 1 ? own(cam, 'img[data-eb]').filter(m => !m.closest('[data-noface]')) : [];
+  const vis = m => { const r = m.getBoundingClientRect(); if (r.width < 2) return false; let o = 1; for (let e = m; e && e !== cam; e = e.parentElement) { const cs = getComputedStyle(e); if (cs.display === 'none' || cs.visibility === 'hidden') return false; o *= +cs.opacity; } return o > .05; };
   if (emb && next) {
-    const W = s.win(t, d), Se = s.Send;
+    // F (opt-in fullWin): the hand-off is the next effect at full card, dissolving in over the last 2 frames (no window, no early ring, no ghost dive)
+    const FW = FACEF && !!s.fullWin, W = FW ? { c: ZC, w: Z.w, h: Z.h, rr: 0 } : s.win(t, d), Se = FW ? 1 : s.Send;
     emb.style.transformOrigin = '0 0'; emb.style.transform = embT(W.c, Se);
     emb.style.clipPath = W.r != null ? `circle(${(W.r * Se).toFixed(1)}px at ${ZC[0]}px ${ZC[1]}px)`
       : `inset(${(ZC[1] - W.h * Se / 2).toFixed(1)}px ${(ZC[0] - W.w * Se / 2).toFixed(1)}px ${(ZC[1] - W.h * Se / 2).toFixed(1)}px ${(ZC[0] - W.w * Se / 2).toFixed(1)}px round ${((W.rr || 0) * Se).toFixed(1)}px)`;
-    const o = seq ? (swap ? 1 : 0) : s.winIn ? s.winIn(t, d) : 1;
-    emb.style.opacity = o.toFixed(3); emb.style.visibility = o > 0 ? 'visible' : 'hidden';
+    const wi = FW ? cl((t - (d - .067)) / .067) : s.winIn ? s.winIn(t, d) : 1, o = faces.some(vis) && s.dissolve !== false ? Math.min(wi, cl((t - (d - .133)) / .133)) : wi; emb.style.opacity = o.toFixed(3); emb.style.visibility = o > 0 ? 'visible' : 'hidden';
     if (o > 0) runScene(next, emb, t - d, next.d || d, null);
   }
-  if (swap) faces.forEach(m => { m.style.opacity = '0'; });
 }
 
 // ---- the still for effect i (1-based). PT(own effect) = your frame 0.3s into the effect. Any other i = another frame of your

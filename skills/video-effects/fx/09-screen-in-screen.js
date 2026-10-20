@@ -69,3 +69,24 @@
   };
   FX[9] = SIS;
 })();
+// Feed cut F (21/10/2026, Charlie at 0:10: "I disappear from the screen here"): the grid v5 tile. A laptop as wide as the card on the
+// grid floor, his live clip sharp on its screen from the first frame. The camera breathes in toward the screen. No blur, no loading bar.
+if (FACEF) (() => {
+  const SW = Math.round(Z.w * 1.3), SH = Math.round(SW * .64), SX = Math.round((Z.w - SW) / 2), SY = Math.round(BEYE - SH * .62), s = 1.0 * SW / 1080;
+  FX[9] = Object.assign({}, FX[9], {
+    Send: 1, fullWin: true, seq: true,
+    html(id, inner) {
+      return `<div class="Z fx9f">${stageZ('floor')}<div class="Z fx9w" style="transform-origin:${Z.w / 2}px ${SY + SH / 2}px">
+        <div style="position:absolute;left:${SX - 14}px;top:${SY - 14}px;width:${SW + 28}px;height:${SH + 26}px;border-radius:18px;background:#1b1c1f;box-shadow:0 34px 64px -16px rgba(16,24,40,.5)"></div>
+        <div style="position:absolute;left:${SX - 10}px;top:${SY + SH + 12}px;width:${SW + 20}px;height:18px;border-radius:2px 2px 14px 14px;background:linear-gradient(#e4e6ea,#b9bec5);box-shadow:0 20px 32px -10px rgba(16,24,40,.45)"></div>
+        <div style="position:absolute;left:${SX - 40}px;top:${SY + SH + 30}px;width:${SW + 80}px;height:${Z.h - SY - SH}px;clip-path:polygon(4% 0,96% 0,100% 100%,0 100%);background:linear-gradient(#d9dce1,#c4c8ce 60%,#b4b9c0)"></div>
+        <div style="position:absolute;left:${SX + 30}px;top:${SY + SH + 50}px;width:${SW - 60}px;height:${Math.round((Z.h - SY - SH) * .42)}px;clip-path:polygon(3% 0,97% 0,100% 100%,0 100%);background:repeating-linear-gradient(90deg,#2b2d31 0 30px,#c4c8ce 30px 34px),#2b2d31;-webkit-mask:repeating-linear-gradient(#000 0 26px,transparent 26px 32px)"></div>
+        <div style="position:absolute;left:${Z.w / 2 - 90}px;top:${SY + SH + 60 + Math.round((Z.h - SY - SH) * .42)}px;width:180px;height:${Math.round((Z.h - SY - SH) * .3)}px;border-radius:10px;background:#bfc3c9;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)"></div>
+        <div style="position:absolute;left:${SX}px;top:${SY}px;width:${SW}px;height:${SH}px;border-radius:3px;overflow:hidden;background:#111">${plate(PT(9), SW / 2, SH * .46, s, 'fx9-live')}
+          <div class="Z" style="background:linear-gradient(115deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.12) 48%,rgba(255,255,255,0) 60%)"></div></div></div>${SLOT}</div>`;
+    },
+    camera: () => null,
+    seek(cam, t, d) { const b = (1 - Math.cos(2 * Math.PI * cl(t / d))) / 2, sc = 1 + .1 * b; one(cam, '.fx9w').style.transform = `translateY(${(8 * b).toFixed(1)}px) scale(${sc.toFixed(4)})`; },
+    win: () => ({ c: ZC, w: Z.w, h: Z.h, rr: 0 }), winIn: (t, d) => P(t, d - .133, .133),
+  });
+})();

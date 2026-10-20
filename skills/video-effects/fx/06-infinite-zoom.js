@@ -24,3 +24,25 @@
     winIn: (t, d) => ez(P(t, .5 + .45 * (d - .5), .25 * (d - .5))),   // late: only once the zoom has made the inner frame big
   };
 })();
+
+// Feed cut F (20/10/2026 23:40, Charlie 23:34: the grid tiles look "way more premium"): the LinkedIn grid Infinite Zoom, copied in
+// and scaled to the face card. A true Droste: a framed print on his wall (top right, clear of his face) shows his shot, which holds
+// the same print. The camera zooms into the print until the inner him fills the card at his plain view, then the next effect
+// dissolves in over the last 4 frames. A and B unchanged.
+if (FACEF) (() => {
+  const R = .22, C = [486, 128], NL = 4;
+  const zt6 = s => `translate(${(C[0] - s * C[0]).toFixed(2)}px,${(C[1] - s * C[1]).toFixed(2)}px) scale(${s.toFixed(5)})`;
+  const w = (t, d) => eio(P(t, .14, d - .14 - .02));
+  FX[6] = {
+    name: NAMES[5], row: 5, bg: 'floor', Send: 1,
+    html() { return `<style>.z6{position:absolute;left:0;top:0;width:${Z.w}px;height:${Z.h}px;overflow:hidden;transform-origin:0 0}
+      .z6.p{box-shadow:0 0 0 30px #fff,0 0 0 34px rgba(29,29,31,.22),0 30px 60px 10px rgba(16,24,40,.5)}</style>
+      ${[...Array(NL).keys()].map(i => `<div class="z6${i ? ' p' : ''}" data-l="${i}">${himView(PT(6), i ? 'deco' : 'me')}</div>`).join('')}${SLOT}`; },
+    camera: () => null,
+    seek(cam, t, d) { const s = Math.pow(1 / R, w(t, d)), a = ez(P(t, .02, .14));
+      own(cam, '.z6').forEach(e => { const i = +e.dataset.l, si = s * Math.pow(R, i) * (i === 1 ? .85 + .15 * a : 1);
+        e.style.transform = zt6(si); e.style.display = si < .01 ? 'none' : 'block'; if (i) e.style.opacity = (i === 1 ? a : 1).toFixed(3); }); },
+    win: () => ({ c: ZC, w: Z.w, h: Z.h, rr: 0 }),
+    winIn: (t, d) => P(t, d - .133, .133),
+  };
+})();

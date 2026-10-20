@@ -18,7 +18,7 @@
       one(cam, '.fx7c').style.transform = `translateZ(${-W / 2}px) rotateY(${(-th).toFixed(3)}deg)`;
       const sh = x => x > .001 ? `brightness(${(1 - .35 * x).toFixed(3)})` : 'none';   // the face turning away darkens (a filter on the face, nothing laid over him)
       one(cam, '.fx7a').style.filter = sh(Math.sin(Math.PI / 2 * s)); one(cam, '.fx7b').style.filter = sh(Math.cos(Math.PI / 2 * s));
-      if (FACEF) { one(cam, '.fx7a').style.opacity = (1 - P(s, .3, .2)).toFixed(3); one(cam, '.fx7b').style.opacity = P(s, .5, .2).toFixed(3); } },   // never two faces on the cube at once
+      if (FACEF) { one(cam, '.fx7a').style.opacity = s < .5 ? 1 : 0; one(cam, '.fx7b').style.opacity = s < .5 ? 0 : 1; } },   // F: one of him on the cube, a hard swap at 45 degrees (#137/#138)
     win() { return { c: ZC, w: Z.w, h: Z.h, rr: 0 }; },
     winIn: (t, d) => t > .3 ? 1 : 0,
   };

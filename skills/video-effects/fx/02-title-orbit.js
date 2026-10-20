@@ -44,3 +44,7 @@ const ORBIT = {
 };
 
 FX[2] = ORBIT;
+// Feed cut F (21/10/2026, Charlie: the blue circle at 0:02): no dropped O ring and no dive into his face. TITLE ORBIT stays whole and spins
+// to the end; Lens dissolves in over the last 4 frames.
+if (FACEF) { const sk = FX[2].seek; Object.assign(FX[2], { noDive: true, fullWin: true, seek(cam, t, d) { sk.call(this, cam, t, d); one(cam, '.osv').style.opacity = 0;
+  const K = d / 2, phi = orbPhi(t, K), tl = orbTilt(t, K), L = letterAt(OI, phi, tl), B = own(cam, '.ob'), Fr = own(cam, '.of'); B[OI].style.opacity = L.s <= 0 ? .5 : 0; Fr[OI].style.opacity = L.s > 0 ? 1 : 0; } }); }

@@ -105,3 +105,45 @@
   };
   FX[12] = DU;
 })();
+// Feed cut F (21/10/2026, Charlie: "really the best we can do for depth UI?"): the grid v5 tile, re-laid for the tall card. He stays full
+// size and centred. Claude chat and the timeline hang BEHIND him (his head cuts into them, via his matte); the terminal and the "Reel ready"
+// toast float IN FRONT of his shoulders. A slow orbit: far panels slide less than he does, near ones much more, each turns to face the lens.
+if (FACEF) (() => {
+  const CL = `<img src="${SUN}" style="width:100%;height:100%;display:block">`;
+  const tl = [['#0071E3', 24, 120], ['#635BFF', 96, 88], ['#0071E3', 8, 72], ['#9ec5f8', 120, 96]];
+  // [class, x, y, w, h, depth, base turn]
+  const L = [['b0', -40, 170, 300, 196, -.55, 16], ['b1', 300, 380, 300, 188, -.55, -16], ['f0', 8, 930, 300, 150, 1.15, 12], ['f1', 208, 1130, 300, 112, 1.15, -12]];
+  const box = (c, x, y, w, h, st, inner) => `<div class="w ${c}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;${st}">${inner}</div>`;
+  const bar = (dark) => `<div class="br" style="${dark ? 'background:#2a2b30;border-color:#34353b' : ''}"><i></i><i></i><i></i></div>`;
+  FX[12] = Object.assign({}, FX[12], {
+    Send: 1, fullWin: true, camera: () => null,
+    html(id, inner) {
+      const [b0, b1, f0, f1] = L;
+      return `<style>.fx12v{perspective:1200px;perspective-origin:${Z.w / 2}px ${BEYE}px}.fx12v .w{position:absolute;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 6px rgba(0,19,47,.12),0 30px 60px -18px rgba(0,19,47,.45)}
+        .fx12v .f{box-shadow:0 2px 6px rgba(0,19,47,.16),0 40px 80px -10px rgba(0,19,47,.55)}
+        .fx12v .br{height:32px;border-bottom:1px solid #eceef1;display:flex;gap:7px;align-items:center;padding-left:14px}.fx12v .br i{width:10px;height:10px;border-radius:50%;background:#d6d9de}
+        .fx12v .rm,.fx12v .mt{position:absolute;left:0;top:0;width:${Z.w}px;height:${Z.h}px;transform-origin:${Z.w / 2}px ${BEYE}px}</style>
+        <div class="Z fx12v"><div class="rm">${himView(PT(12), 'fx12-room')}</div>
+        ${box('b0', ...b0.slice(1, 5), '', `${bar()}<div style="padding:14px 18px;display:flex;flex-direction:column;gap:12px"><div style="display:flex;gap:10px;align-items:center;font-weight:800;font-size:26px;color:#1d1d1f"><div style="width:30px;height:30px">${CL}</div>Claude</div>
+          <div style="height:12px;width:240px;border-radius:6px;background:#e8eaee"></div><div style="height:12px;width:190px;border-radius:6px;background:#e8eaee"></div>
+          <div style="align-self:flex-end;padding:8px 18px;border-radius:16px;background:#0071E3;color:#fff;font-size:22px;font-weight:700">Make it pop</div></div>`)}
+        ${box('b1', ...b1.slice(1, 5), 'background:#1d1d1f', `${bar(1)}<div style="padding:14px 16px;position:relative;display:flex;flex-direction:column;gap:11px">${tl.map(([c, a, b]) => `<div style="height:22px;position:relative"><div style="position:absolute;left:${a}px;width:${b}px;height:22px;border-radius:6px;background:${c}"></div></div>`).join('')}
+          <div class="ph" style="position:absolute;left:130px;top:6px;width:4px;height:140px;border-radius:2px;background:#fff"></div></div>`)}
+        <div class="mt">${cut(PT(12), Z.w / 2, BEYE, BS, 'fx12-me')}</div>
+        ${box('f0 f', ...f0.slice(1, 5), 'background:#1d1d1f', `${bar(1)}<div style="font-family:ui-monospace,Menlo,monospace;color:#fff;font-size:20px;line-height:28px;padding:10px 16px">$ claude render<br><span style="color:#9ec5f8">20 effects · 1080x1920</span></div>
+          <div style="position:absolute;left:16px;right:16px;bottom:14px;height:11px;border-radius:6px;background:#3a3b41;overflow:hidden"><div class="pb" style="height:100%;background:#0071E3"></div></div>`)}
+        ${box('f1 f', ...f1.slice(1, 5), 'border-radius:22px;display:flex;align-items:center;gap:14px;padding:0 20px', `<div style="flex:none;width:56px;height:56px;border-radius:50%;background:#0071E3;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" style="width:32px;height:32px"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><div style="font-weight:800;font-size:30px;color:#1d1d1f;line-height:1.1">Reel ready</div><div style="font-size:18px;color:#6e6e73;margin-top:4px">exported in 12s</div></div>`)}
+        </div>${SLOT}`;
+    },
+    seek(cam, t, d) {
+      const u = cl(t / d), c = -Math.cos(Math.PI * u), A = 30, sh = `translateX(${(-A * .35 * c).toFixed(2)}px) scale(1.04)`;
+      one(cam, '.fx12v .rm').style.transform = sh; one(cam, '.fx12v .mt').style.transform = sh;
+      L.forEach(([k, x, y, w, h, dz, ry], i) => { const e = one(cam, '.fx12v .' + k), a = ez(P(t, .04 + .07 * i, .3));
+        e.style.transform = `translate(${(-A * (.35 + dz) * c).toFixed(1)}px,${((1 - a) * 40 * Math.sign(dz)).toFixed(1)}px) rotateY(${(ry - 12 * c * Math.sign(dz)).toFixed(2)}deg)`;
+        e.style.opacity = a.toFixed(3); });
+      one(cam, '.fx12v .ph').style.left = (130 - 60 * c).toFixed(1) + 'px'; one(cam, '.fx12v .pb').style.width = (100 * mix(.2, 1, ez(P(t, .1, .7 * d)))).toFixed(1) + '%';
+    },
+    win: () => ({ c: ZC, w: Z.w, h: Z.h, rr: 0 }), winIn: (t, d) => P(t, d - .133, .133),
+  });
+})();

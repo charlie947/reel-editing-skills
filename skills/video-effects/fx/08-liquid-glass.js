@@ -85,3 +85,6 @@
   };
   FX[8] = LG;
 })();
+// Feed cut F (21/10/2026, Charlie: "between Liquid Glass and here is very fast"): no dive into the pane. His face stays whole with the
+// glass over him to the end; Screen in Screen dissolves in over the last 4 frames.
+if (FACEF) Object.assign(FX[8], { noDive: true, fullWin: true });

@@ -27,3 +27,35 @@ const LENS = {
 };
 
 FX[3] = LENS;
+
+// Feed cut F (20/10/2026 23:38, Charlie 23:34: the grid tiles look "way more premium"): the LinkedIn grid Lens, copied in and
+// scaled to the face card. A real magnifying glass (thick graphite rim, handle, highlight) glides in over his chest logo at 2.2x
+// and drifts so the magnified detail moves. It never covers his face. Then it opens out into the next effect. A and B unchanged.
+if (FACEF) (() => {
+  const R = 150, MAG = 2.2, C0 = [350, 1090], TG = [450, 1060];
+  const at = t => { const u = ez(P(t, .02, .4)), p0 = [Z.w + R + 120, Z.h + 40], dr = [24 * Math.sin(5.2 * t), 9 * Math.sin(10.4 * t)];
+    return [mix(p0[0], C0[0], u) + dr[0], mix(p0[1], C0[1], u) + dr[1]]; };
+  const DV = d => Math.max(.8, d - .5), Zf = (t, d) => ez(P(t, DV(d), d - DV(d)));
+  FX[3] = Object.assign({}, LENS, {
+    Send: .45 * Z.w / R,
+    wr(t, d) { const dv = DV(d), dl = d - dv; return mix(R * .9, 1.02 * ZD / this.Send, ez(P(t, dv + .05 * dl, .8 * dl))); },
+    html() { return `<style>
+      .l3h{position:absolute;width:52px;height:250px;border-radius:26px;transform-origin:26px 0;background:linear-gradient(90deg,#141518,#4b4e55 38%,#24262b 70%,#101113);box-shadow:0 16px 30px -6px rgba(0,19,47,.55)}
+      .l3h i{position:absolute;left:4px;right:4px;top:0;height:46px;border-radius:6px;background:linear-gradient(90deg,#7d828b,#d9dce1 40%,#7d828b)}
+      .l3s{position:absolute;border-radius:50%;pointer-events:none;background:radial-gradient(ellipse 42% 30% at 28% 20%,rgba(255,255,255,.85),rgba(255,255,255,0) 72%),radial-gradient(ellipse 30% 14% at 72% 86%,rgba(255,255,255,.35),rgba(255,255,255,0) 70%),radial-gradient(circle,rgba(255,255,255,0) 62%,rgba(150,200,255,.22) 100%)}
+      .l3r{position:absolute;border-radius:50%;pointer-events:none;box-shadow:inset 0 0 0 3px rgba(255,255,255,.95),inset 0 0 22px 4px rgba(0,19,47,.3),0 0 0 15px #2a2c31,0 0 0 17px #6b6f77,0 0 0 18px rgba(0,0,0,.35),0 24px 44px -6px rgba(0,19,47,.6)}
+      </style><div class="Z body">${lensHim('me')}</div><div class="l3h"><i></i></div><div class="Z lensIn"><div class="Z mag" data-noface>${lensHim('me')}</div>${SLOT}</div><div class="l3s"></div><div class="l3r"></div>`; },
+    camera(t, d) { const z = Zf(t, d), L = at(t); return z > 0 ? { a: L, f: [mix(L[0], ZC[0], z), mix(L[1], ZC[1], z)], S: Math.pow(this.Send, z) } : null; },
+    seek(cam, t, d) { const L = at(t), z = Zf(t, d), band = 1 - P(t, DV(d), .15);
+      const li = one(cam, '.lensIn'); li.style.clipPath = `circle(${Math.max(R * .9, this.wr(t, d) + 2).toFixed(1)}px at ${L[0].toFixed(1)}px ${L[1].toFixed(1)}px)`;
+      const mg = one(cam, '.mag'); mg.style.transformOrigin = '0 0'; mg.style.transform = `translate(${L[0].toFixed(1)}px,${L[1].toFixed(1)}px) scale(${MAG}) translate(${(-TG[0] - (L[0] - C0[0])).toFixed(1)}px,${(-TG[1] - (L[1] - C0[1])).toFixed(1)}px)`;
+      mg.style.opacity = (1 - P(t, DV(d) - .04, .06)).toFixed(3);
+      ['.l3s', '.l3r'].forEach(s => Object.assign(one(cam, s).style, { left: (L[0] - R).toFixed(1) + 'px', top: (L[1] - R).toFixed(1) + 'px', width: 2 * R + 'px', height: 2 * R + 'px', opacity: band.toFixed(3) }));
+      const a = 42 * Math.PI / 180, rr = R + 14; Object.assign(one(cam, '.l3h').style, { left: (L[0] + rr * Math.cos(a) - 26).toFixed(1) + 'px', top: (L[1] + rr * Math.sin(a)).toFixed(1) + 'px', transform: 'rotate(-48deg)', opacity: band.toFixed(3) }); },
+    win(t, d) { return { c: at(t), r: this.wr(t, d) }; },
+    winIn: (t, d) => { const dv = DV(d), dl = d - dv; return P(t, dv + .3 * dl, .25 * dl); },
+  });
+})();
+// Feed cut F (21/10/2026, Charlie: "it zooms here, then goes nowhere"): no dive. The beat ends on the magnifier over his chest logo;
+// Portal dissolves in over the last 4 frames, so no ring shows early.
+if (FACEF) { const sk = FX[3].seek; Object.assign(FX[3], { noDive: true, fullWin: true, seek(cam, t, d) { sk.call(this, cam, t, 99); } }); }   // 99: the rim and the 2.2x logo hold to the last frame

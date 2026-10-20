@@ -10,8 +10,9 @@
   const eyeH = R1.y - (COL - PG.eye) * sH, cx = Z.w / 2, RC = [cx, R1.y + H1 / 2];
   const S10 = 2.4, wE = Z.w / S10, hE = Z.h / S10, LIFT = 0;
   const sp = p => p <= 0 ? 0 : p >= 1 ? 1 : 1 - Math.exp(-6 * p) * Math.cos(9 * p) * (1 - p);
-  const form = t => ez(P(t, .08, .72));
-  const dv = (t, d) => eio(P(t, d - .56, .56));
+  const DF = (((window.TIMINGS || {}).F || {}).effects || [])[9]?.len || .78;
+  const form = t => FACEF ? ez(P(t, .04, .34)) * (1 - eio(P(t, DF - .22, .2))) : ez(P(t, .08, .72));   // F's beat is 0.78s: the print lands by 0.38s, holds, and opens back out to his full view for the seam (no double head)
+  const dv = (t, d) => FACEF ? 0 : eio(P(t, d - .56, .56));   // F: no dive, the print holds at full strength to the seam
   // him: scale and eye height (scene coords), and the live/still split line at his collar
   const him = t => { const f = form(t), lift = LIFT * sp(P(t, .55, .7)); const s = mix(BS, sH, f), ey = mix(BEYE, eyeH, f) - lift; return { s, ey, col: ey + (COL - PG.eye) * s }; };
   const rect = t => { const f = form(t); return { x0: mix(-.12 * Z.w, R1.x, f), x1: mix(1.12 * Z.w, R1.x + W1, f), y0: mix(-.12 * Z.h, R1.y, f), y1: mix(1.12 * Z.h, R1.y + H1, f), b: B * f }; };
@@ -56,21 +57,27 @@
       w.style.transformOrigin = `${RC[0]}px ${RC[1]}px`; w.style.transform = `rotate(${rot.toFixed(3)}deg)`;
       Object.assign(one(cam, '.fx10-pp').style, { left: (R.x0 - R.b).toFixed(1) + 'px', top: (R.y0 - R.b).toFixed(1) + 'px', width: (R.x1 - R.x0 + 2 * R.b).toFixed(1) + 'px', height: (R.y1 - R.y0 + R.b + BB * form(t)).toFixed(1) + 'px' });
       one(cam, '.fx10-r').style.clipPath = ins(R.x0, R.y0, R.x1, R.y1);
-      one(cam, '.fx10-room').style.opacity = (1 - P(t, .12, .4)).toFixed(3);            // the room dissolves to the studio backdrop
+      one(cam, '.fx10-room').style.opacity = (FACEF ? 1 - form(t) : 1 - P(t, .12, .4)).toFixed(3);            // the room dissolves to the studio backdrop
       const L = mix(1.15 * Z.h, R1.y + .3 * H1, ez(P(t, .1, .7)));                      // live above this line (inside the print), the print's still below it
       one(cam, '.fx10-tor').style.clipPath = ins(-50, L, Z.w + 50, Z.h + 50);
       const hd = one(cam, '.fx10-hd'), yb = Math.min(R.y0, L), q = v => v.toFixed(1) + 'px', bg = 3 * Z.h;   // over the top border he is free; below it he stays inside the print
       hd.style.clipPath = `polygon(${q(-bg)} ${q(-bg)},${q(bg)} ${q(-bg)},${q(bg)} ${q(yb)},${q(R.x1)} ${q(yb)},${q(R.x1)} ${q(L)},${q(R.x0)} ${q(L)},${q(R.x0)} ${q(yb)},${q(-bg)} ${q(yb)})`;
-      hd.style.opacity = (1 - P(t, d - .28, .14)).toFixed(3);
+      hd.style.opacity = (FACEF ? 1 - P(t, d - .133, .133) : 1 - P(t, d - .28, .14)).toFixed(3);   // F: his live head stays out to the seam, then hands over with the dissolve
       // chips
       const tc = t - .62; const chs = own(cam, '.fx10-ch');
       CH.forEach(([sd, xs, vx, vy, vr, sc], i) => { const c = chs[i]; if (tc <= 0 || tc > 1.6) { c.style.display = 'none'; return; }
         const x0 = cx + sd * (.5 * W1 * xs - .03 * Z.w), y0 = R1.y - B / 2, k = W1 / 451;
         const x = x0 + sd * vx * k * tc, y = y0 - vy * k * tc + .5 * 1100 * k * tc * tc, o = 1 - P(tc, .9, .5);
-        Object.assign(c.style, { display: 'block', opacity: o.toFixed(3), transform: `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) rotate(${(vr * tc).toFixed(1)}deg) scale(${sc})` }); });
+        Object.assign(c.style, { display: 'block', opacity: (o * (FACEF ? Math.min(1, 3 * form(t)) : 1)).toFixed(3), transform: `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) rotate(${(vr * tc).toFixed(1)}deg) scale(${sc})` }); });
     },
     win(t, d) { const m = eio(P(t, d - .5, .5)); return { c: RC, w: mix(W1, wE, m), h: mix(H1, hE, m), rr: Z.r / S10 * m }; },
     winIn: (t, d) => P(t, d - .3, .1),
   };
   FX[10] = FB;
 })();
+
+
+// Feed cut F (20/10/2026 23:50): the grid build does not fit the tall face card (his shoulders fill its width, so the frame hides behind him).
+// F keeps this reel build at full strength (print lands by 0.44s, live head over the top border, chips fly) and dissolves into the
+// next effect over the last 4 frames, with no dive (F's 0.78s beat is too short for one). A and B unchanged.
+if (FACEF) Object.assign(FX[10], { Send: 1, camera: () => null, win: () => ({ c: ZC, w: Z.w, h: Z.h, rr: 0 }), winIn: (t, d) => P(t, d - .133, .133) });
