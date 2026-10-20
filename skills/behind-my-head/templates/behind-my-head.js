@@ -4,7 +4,7 @@
 
    A page behind you, landing on a word, with an optional part of it lifting out on a second word:
      behindMyHead({ start: 4.2, end: 8.6, page: 'assets/page.png', url: 'yoursite.com/pricing', word: 'pricing', headTop: 430,
-                    focus: { word: 'annual', x: 40, y: 120, w: 300, h: 260 } })
+                    focus: { word: 'annual', x: 40, y: 120, w: 300, h: 160 } })
    One number behind you, rolling in and settling on its word:
      behindMyHead({ start: 8.6, end: 11.4, number: '12,400', label: 'Customers', word: 'twelve', headTop: 430 })
 
