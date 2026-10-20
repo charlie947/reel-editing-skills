@@ -9,10 +9,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
 const puppeteer = require(process.env.PUPPETEER_PATH || 'puppeteer');
-const dir = path.dirname(new URL(import.meta.url).pathname);
+const dir = path.dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
 const stillsArg = args.includes('--stills') ? args[args.indexOf('--stills') + 1] : null;
 const format = args.includes('--format') ? args[args.indexOf('--format') + 1] : args.includes('--linkedin') ? 'linkedin' : 'vertical';

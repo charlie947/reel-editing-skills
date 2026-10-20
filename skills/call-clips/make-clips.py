@@ -59,7 +59,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     d = e - s
     fit = 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920' if vertical else f'scale=1080:{band_h}:flags=lanczos'
     fc = (f"[0:v]{fit},setsar=1[v];[1:v][v]overlay=0:{band_y}:shortest=1,ass=clip{r}.ass,"
-          f"scale=in_range=full:out_range=limited,format=yuv420p[o];"
+          f"scale=out_range=limited,format=yuv420p[o];"
           f"[0:a]afade=t=in:d=0.03,afade=t=out:st={d - 0.03:.2f}:d=0.03[a]")
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', f'{s:.2f}', '-t', f'{d:.2f}', '-i', a.src,
                     '-f', 'lavfi', '-i', f'color=0x{a.bg}:s=1080x1920:r=30', '-filter_complex', fc,

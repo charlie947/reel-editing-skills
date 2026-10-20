@@ -62,7 +62,7 @@ Then fix the words Whisper got wrong by hand (names, product names, the comment 
 ## Step 6: Set up the video folder
 
 ```
-cp -R <this skill>/starter my-video
+mkdir -p my-video && cp -R <this skill>/starter/. my-video/
 ffmpeg -i cut.mp4 -vf "fps=30,scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920" -q:v 3 my-video/face/%06d.jpg
 ```
 
