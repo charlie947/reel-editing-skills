@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video Effects</title><link rel="stylesheet" href="style.css"></head>
+<body><div id="wrap"><div id="fr"></div></div>
+<!-- run.cjs sets window.SETUP and window.LIVE before this page loads. Opened by hand (no SETUP) it plays Grid Dive with no footage, a load check only. -->
+<script src="engine.js"></script>
+<script src="../fx/01-grid-dive.js"></script>
+<script src="../fx/02-title-orbit.js"></script>
+<script src="../fx/03-magnifying-lens.js"></script>
+<script src="../fx/04-portal.js"></script>
+<script src="../fx/05-clone-room.js"></script>
+<script src="../fx/06-infinite-zoom.js"></script>
+<script src="../fx/07-cube-spin.js"></script>
+<script src="../fx/08-liquid-glass.js"></script>
+<script src="../fx/09-screen-in-screen.js"></script>
+<script src="../fx/10-frame-break.js"></script>
+<script src="../fx/11-tile-tunnel.js"></script>
+<script src="../fx/12-depth-ui.js"></script>
+<script src="../fx/13-vertigo.js"></script>
+<script src="../fx/14-phone-fan.js"></script>
+<script src="../fx/15-shatter.js"></script>
+<script src="../fx/16-spotlight.js"></script>
+<script src="../fx/17-pull-back-reveal.js"></script>
+<script src="../fx/18-ribbon-wrap.js"></script>
+<script src="../fx/19-zoom-through.js"></script>
+<script src="../fx/20-head-pop-out.js"></script>
+<script src="core-single.js"></script>
+<script>
+(() => {
+  const fr = document.getElementById('fr'); EX.build(fr); window.STILL = fr;
+  const q = new URLSearchParams(location.search);
+  if (q.has('still')) { EX.seek(fr, +(q.get('t') || 0)); return; }
+  const fit = () => { const s = Math.min(innerWidth / 1080, innerHeight / 1920); document.getElementById('wrap').style.transform = `scale(${s})`; };
+  addEventListener('resize', fit); fit();
+  const t0 = performance.now() / 1000;
+  (function tick() { EX.seek(fr, (performance.now() / 1000 - t0) % EX.D); requestAnimationFrame(tick); })();
+})();
+</script></body></html>

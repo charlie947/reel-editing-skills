@@ -16,7 +16,7 @@ A ranking you can see fill up as you talk. Every item lands in its row on the wo
 1. **The cut take, `face/` frames and `words.js`** from `video-intake`.
 2. **The list.** Each item as it should read on its chip (2 words is best, 3 at most), its tier, and the word you say it on.
 3. **A title** for the board, optional, under 30 characters.
-4. **A cut-out of you for this beat.** `scripts/matte.py` in this skill makes it with RobustVideoMatting, free and local. No other skill in the pack ships a matting tool, so this is the one to use.
+4. **A cut-out of you for this beat.** `scripts/matte.py` in this skill makes it with RobustVideoMatting, free and local. Use it for this beat. (`video-effects` has its own matting step for the 20 effects.)
 
 ```
 python3 -m pip install torch torchvision pillow numpy scipy     # once. scipy is optional, it fills small holes

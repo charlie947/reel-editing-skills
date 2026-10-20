@@ -2,14 +2,14 @@
   "name": "reel-editing-skills",
   "owner": { "name": "Charlie Hills", "url": "https://github.com/charlie947" },
   "metadata": {
-    "description": "20 skills that turn a to-camera recording into a polished motion video with Claude Code: product demos, explainers, founder takes, news reactions, clips from your calls and webinars, your brand, every platform size.",
+    "description": "41 skills that turn a to-camera recording into a polished motion video with Claude Code: product demos, explainers, founder takes, news reactions, clips from your calls and webinars, your brand, every platform size, and 20 one-command effects on your own clip.",
     "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "reel-editing-skills",
       "source": "./",
-      "description": "Edit to-camera motion videos for any business with Claude Code. One build, every platform. 20 skills.",
+      "description": "Edit to-camera motion videos for any business with Claude Code. One build, every platform. 21 editing skills plus 20 one-command effects.",
       "version": "1.0.0",
       "author": { "name": "Charlie Hills" },
       "license": "MIT",

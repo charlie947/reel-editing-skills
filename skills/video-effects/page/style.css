@@ -1,0 +1,33 @@
+/* Video effects: the stage, the motion zone and the shared effect styles. Each fx file carries its own styles too. */
+html,body{margin:0;background:#fff;overflow:hidden}
+#wrap{position:relative;transform-origin:0 0}
+.f{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:-apple-system,'SF Pro Display',system-ui,sans-serif;color:#1d1d1f;background:#0071E3}
+.f *{box-sizing:border-box}
+.f .L{position:absolute;left:0;top:0;width:1080px;height:1920px;pointer-events:none}
+.f .Z{position:absolute;left:0;top:0;width:var(--zw);height:var(--zh)}
+.stz{position:absolute;width:1080px;height:1920px}
+.zone{position:absolute;overflow:hidden;isolation:isolate}
+.floor{position:absolute;left:-1000px;top:1050px;width:3080px;height:1500px;transform:rotateX(68deg);transform-origin:50% 0;background-image:linear-gradient(rgba(90,176,255,.55) 3px,transparent 3px),linear-gradient(90deg,rgba(90,176,255,.55) 3px,transparent 3px);background-size:120px 120px;-webkit-mask-image:linear-gradient(180deg,#000,transparent 80%);mask-image:linear-gradient(180deg,#000,transparent 80%)}
+.bluegrid{background-image:linear-gradient(rgba(255,255,255,.08) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.08) 2px,transparent 2px);background-size:90px 90px}
+.card{position:absolute;overflow:hidden;border-radius:32px;background:#222;box-shadow:0 2px 6px rgba(0,19,47,.12),0 30px 70px -14px rgba(0,10,30,.45)}
+.card::after{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35);pointer-events:none}
+.gt{position:absolute;overflow:hidden;background:#0b0f17}
+.ol{position:absolute;left:0;top:0;text-align:center;font-weight:800;line-height:1;letter-spacing:-.02em;color:#fff;text-shadow:0 8px 26px rgba(0,0,0,.5)}
+.osv circle{filter:drop-shadow(0 0 10px rgba(160,205,255,.6)) drop-shadow(0 10px 24px rgba(0,0,0,.4))}
+.lensR{position:absolute;border-radius:50%;border:2px solid rgba(255,255,255,.95);box-shadow:0 0 0 1px rgba(255,96,80,.22),inset 0 0 0 1px rgba(70,140,255,.26),inset 0 0 0 3px rgba(255,255,255,.18),0 30px 60px -14px rgba(0,10,30,.5),0 8px 16px -6px rgba(0,10,30,.3)}
+.lensG{position:absolute;border-radius:50%;background:radial-gradient(ellipse 46% 30% at 36% 24%,rgba(255,255,255,.42),rgba(255,255,255,0) 70%),radial-gradient(circle at 50% 50%,rgba(255,255,255,0) 80%,rgba(255,255,255,.22) 88%,rgba(0,19,47,.16) 100%)}
+.grain{z-index:60;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.ebx{position:absolute}.ebx[data-g]{background-image:linear-gradient(rgba(255,255,255,.08) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.08) 2px,transparent 2px);background-size:90px 90px}
+
+/* ---- v4: orbit ring strokes and the O ring per style */
+.rb{stroke:rgba(160,205,255,.45);stroke-width:2.5}.rf{stroke:rgba(200,228,255,.8);stroke-width:2.5}.osv circle{stroke:#fff}
+/* ---- v4 WHITE style: light studio stages, ink letters, the accent on the O ring only */
+.f[data-s=white]{background:#f3f5f8}
+.wgrid{background-image:linear-gradient(rgba(29,29,31,.045) 2px,transparent 2px),linear-gradient(90deg,rgba(29,29,31,.045) 2px,transparent 2px);background-size:90px 90px}
+.floor.wf{background-image:linear-gradient(rgba(0,113,227,.22) 3px,transparent 3px),linear-gradient(90deg,rgba(0,113,227,.22) 3px,transparent 3px)}
+.f[data-s=white] .ebx[data-g]{background-image:linear-gradient(rgba(29,29,31,.045) 2px,transparent 2px),linear-gradient(90deg,rgba(29,29,31,.045) 2px,transparent 2px)}
+.f[data-s=white] .gt{background:#e9edf2;box-shadow:0 14px 34px -10px rgba(0,19,47,.22)}
+.f[data-s=white] .ol{color:#1d1d1f;text-shadow:0 0 3px #fff,0 0 10px rgba(255,255,255,.95),0 0 22px rgba(255,255,255,.7)}   /* white halo: ink letters still read where they cross dark hair */
+.f[data-s=white] .rb{stroke:rgba(0,113,227,.25)}.f[data-s=white] .rf{stroke:rgba(0,113,227,.55)}
+.f[data-s=white] .osv circle{stroke:#0071E3;filter:drop-shadow(0 10px 22px rgba(0,19,47,.22))}

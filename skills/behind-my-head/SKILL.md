@@ -18,7 +18,7 @@ You stay in front. The page or the number sits behind you, in the room, and land
    - a real screenshot of the page (at least 1920px wide, true ratio, no stretching) and the address to type in the bar
    - one number exactly as it should read (`12,400`, `$3.2m`, `87%`), its source, and a short label
 3. **The word it lands on.** Optional for a page: a second word and the part of the page that lifts out on it.
-4. **A cut-out of you for this beat.** `scripts/matte.py` in this skill makes it with RobustVideoMatting, free and local. No other skill in the pack ships a matting tool, so this is the one to use.
+4. **A cut-out of you for this beat.** `scripts/matte.py` in this skill makes it with RobustVideoMatting, free and local. Use it for this beat. (`video-effects` has its own matting step for the 20 effects.)
 
 ```
 python3 -m pip install torch torchvision pillow numpy scipy     # once. scipy is optional, it fills small holes
