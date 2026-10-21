@@ -29,11 +29,12 @@ const LENS = {
 FX[3] = LENS;
 
 // Feed cut F (20/10/2026 23:38): the LinkedIn grid Lens, copied in and
-// scaled to the face card. A real magnifying glass (thick graphite rim, handle, highlight) glides in over his chest logo at 2.2x
+// scaled to the face card. A real magnifying glass (thick graphite rim, handle, highlight) fades in over his chest at 2.2x
 // and drifts so the magnified detail moves. It never covers his face. Then it opens out into the next effect. A and B unchanged.
 if (FACEF) (() => {
   const R = 150, MAG = 2.2, C0 = [350, 1090], TG = C0;   // TG = C0: the glass magnifies exactly what sits under it (an offset target showed skin over the shirt)
-  const at = t => { const u = ez(P(t, .02, .4)), p0 = [Z.w + R + 120, Z.h + 40], dr = [24 * Math.sin(5.2 * t), 9 * Math.sin(10.4 * t)];
+  const at = t => { const u = ez(P(t, .02, .35)), p0 = [C0[0] + 90, C0[1] + 110],   // a short glide that fades in: a long fast glide doubles the rim under the 2-frame blur
+    dr = [24 * Math.sin(5.2 * t), 9 * Math.sin(10.4 * t)];
     return [mix(p0[0], C0[0], u) + dr[0], mix(p0[1], C0[1], u) + dr[1]]; };
   const DV = d => Math.max(.8, d - .5), Zf = (t, d) => ez(P(t, DV(d), d - DV(d)));
   FX[3] = Object.assign({}, LENS, {
@@ -56,8 +57,8 @@ if (FACEF) (() => {
     winIn: (t, d) => { const dv = DV(d), dl = d - dv; return P(t, dv + .3 * dl, .25 * dl); },
   });
 })();
-// Feed cut F (21/10/2026): no dive. The beat ends on the magnifier over his chest logo, then the glass drifts down and
+// Feed cut F (21/10/2026): no dive. The beat ends on the magnifier over his chest, then the glass drifts down and
 // fades out over the last 0.3s, so the hand-off is his plain shot with no glass left to pop off.
 if (FACEF) { const sk = FX[3].seek; Object.assign(FX[3], { noDive: true, fullWin: true, seek(cam, t, d) { sk.call(this, cam, t, 99);   // 99: the rim and the 2.2x logo hold until the fade
-  const x = eio(P(t, d - .3, .3));   // translate and opacity are set fresh on every call, so seek stays a pure function of t
-  ['.lensIn', '.l3s', '.l3r', '.l3h'].forEach(k => { const el = one(cam, k); if (!el) return; el.style.translate = x > 0 ? `${(110 * x).toFixed(1)}px ${(130 * x).toFixed(1)}px` : ''; el.style.opacity = (1 - x).toFixed(3); }); } }); }
+  const x = eio(P(t, d - .3, .3));   // fades in over 0.2s and out over the last 0.3s. Translate and opacity are set fresh on every call, so seek stays a pure function of t
+  ['.lensIn', '.l3s', '.l3r', '.l3h'].forEach(k => { const el = one(cam, k); if (!el) return; el.style.translate = x > 0 ? `${(110 * x).toFixed(1)}px ${(130 * x).toFixed(1)}px` : ''; el.style.opacity = (P(t, .02, .2) * (1 - x)).toFixed(3); }); } }); }
