@@ -125,8 +125,8 @@ if (FACEF) (() => {
         .fx12v .rm,.fx12v .mt{position:absolute;left:0;top:0;width:${Z.w}px;height:${Z.h}px;transform-origin:${Z.w / 2}px ${BEYE}px}</style>
         <div class="Z fx12v"><div class="rm">${himView(PT(12), 'me')}</div>
         ${box('b0', ...b0.slice(1, 5), '', `${bar()}<div style="padding:14px 18px;display:flex;flex-direction:column;gap:12px"><div style="display:flex;gap:10px;align-items:center;font-weight:800;font-size:26px;color:#1d1d1f"><div style="width:30px;height:30px">${CL}</div>Claude</div>
-          <div style="height:12px;width:240px;border-radius:6px;background:#e8eaee"></div><div style="height:12px;width:190px;border-radius:6px;background:#e8eaee"></div>
-          <div style="align-self:flex-end;padding:8px 18px;border-radius:16px;background:#0071E3;color:#fff;font-size:22px;font-weight:700">Make it pop</div></div>`)}
+          ${SETUP.words ? '' : '<div style="height:12px;width:240px;border-radius:6px;background:#e8eaee"></div><div style="height:12px;width:190px;border-radius:6px;background:#e8eaee"></div>'}
+          <div style="align-self:flex-end;max-width:100%;box-sizing:border-box;padding:8px 18px;border-radius:16px;background:#0071E3;color:#fff;font-size:${SETUP.words ? 20 : 22}px;line-height:1.25;font-weight:700;text-align:right">${SAY('Make it pop')}</div></div>`)}
         ${box('b1', ...b1.slice(1, 5), 'background:#1d1d1f', `${bar(1)}<div style="padding:14px 16px;position:relative;display:flex;flex-direction:column;gap:11px">${tl.map(([c, a, b]) => `<div style="height:22px;position:relative"><div style="position:absolute;left:${a}px;width:${b}px;height:22px;border-radius:6px;background:${c}"></div></div>`).join('')}
           <div class="ph" style="position:absolute;left:130px;top:6px;width:4px;height:140px;border-radius:2px;background:#fff"></div></div>`)}
         <div class="mt">${cut(PT(12), Z.w / 2, BEYE, BS, 'me')}</div>
