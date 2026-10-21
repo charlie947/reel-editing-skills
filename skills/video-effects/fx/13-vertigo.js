@@ -58,7 +58,7 @@
       const k = mix(1, K, ez(P(t, ...T.step))), e = ez(P(t, ...T.step)), ex = mix(E0[0], E1[0], e), ey = mix(E0[1], E1[1], e), s0z = c.s(0);
       const hm = one(cam, '.fx13-him');
       if (!s0z || s0z > 8) hm.style.display = 'none';
-      else { hm.style.display = 'block';
+      else { hm.style.display = 'block'; hm.style.opacity = (1 - P(t, T.dive[0], .1)).toFixed(3);   // he fades as the fly-in starts, before he grows: at full speed the motion blur drew him twice
         hm.style.transform = `translate(${VP[0]}px,${VP[1]}px) scale(${(s0z / S).toFixed(5)}) translate(${-VP[0]}px,${-VP[1]}px) translate(${ex.toFixed(2)}px,${ey.toFixed(2)}px) scale(${k.toFixed(5)}) translate(${-E0[0]}px,${-E0[1]}px)`;
       }
       one(cam, '.fx13-room').style.opacity = (1 - P(t, ...T.room)).toFixed(3);
