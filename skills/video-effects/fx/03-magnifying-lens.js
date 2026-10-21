@@ -32,7 +32,7 @@ FX[3] = LENS;
 // scaled to the face card. A real magnifying glass (thick graphite rim, handle, highlight) glides in over his chest logo at 2.2x
 // and drifts so the magnified detail moves. It never covers his face. Then it opens out into the next effect. A and B unchanged.
 if (FACEF) (() => {
-  const R = 150, MAG = 2.2, C0 = [350, 1090], TG = [450, 1060];
+  const R = 150, MAG = 2.2, C0 = [350, 1090], TG = C0;   // TG = C0: the glass magnifies exactly what sits under it (an offset target showed skin over the shirt)
   const at = t => { const u = ez(P(t, .02, .4)), p0 = [Z.w + R + 120, Z.h + 40], dr = [24 * Math.sin(5.2 * t), 9 * Math.sin(10.4 * t)];
     return [mix(p0[0], C0[0], u) + dr[0], mix(p0[1], C0[1], u) + dr[1]]; };
   const DV = d => Math.max(.8, d - .5), Zf = (t, d) => ez(P(t, DV(d), d - DV(d)));
