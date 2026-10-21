@@ -28,7 +28,7 @@ const LENS = {
 
 FX[3] = LENS;
 
-// Feed cut F (20/10/2026 23:38, Charlie 23:34: the grid tiles look "way more premium"): the LinkedIn grid Lens, copied in and
+// Feed cut F (20/10/2026 23:38): the LinkedIn grid Lens, copied in and
 // scaled to the face card. A real magnifying glass (thick graphite rim, handle, highlight) glides in over his chest logo at 2.2x
 // and drifts so the magnified detail moves. It never covers his face. Then it opens out into the next effect. A and B unchanged.
 if (FACEF) (() => {
@@ -56,6 +56,8 @@ if (FACEF) (() => {
     winIn: (t, d) => { const dv = DV(d), dl = d - dv; return P(t, dv + .3 * dl, .25 * dl); },
   });
 })();
-// Feed cut F (21/10/2026, Charlie: "it zooms here, then goes nowhere"): no dive. The beat ends on the magnifier over his chest logo;
+// Feed cut F (21/10/2026): no dive. The beat ends on the magnifier over his chest logo;
 // Portal dissolves in over the last 4 frames, so no ring shows early.
-if (FACEF) { const sk = FX[3].seek; Object.assign(FX[3], { noDive: true, fullWin: true, seek(cam, t, d) { sk.call(this, cam, t, 99); } }); }   // 99: the rim and the 2.2x logo hold to the last frame
+if (FACEF) { const sk = FX[3].seek; Object.assign(FX[3], { noDive: true, fullWin: true, seek(cam, t, d) { sk.call(this, cam, t, 99);
+  const x = eio(P(t, d - .3, .3)), tr = x > 0 ? `translate(${(380 * x).toFixed(1)}px,${(420 * x).toFixed(1)}px)` : '';   // the glass glides off bottom right, so Portal opens on his whole face
+  ['.lensIn', '.l3s', '.l3r', '.l3h'].forEach(k => { const el = one(cam, k); if (el) el.style.translate = x > 0 ? `${(380 * x).toFixed(1)}px ${(420 * x).toFixed(1)}px` : ''; }); } }); }   // 99: the rim and the 2.2x logo hold to the last frame

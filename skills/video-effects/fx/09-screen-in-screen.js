@@ -69,24 +69,37 @@
   };
   FX[9] = SIS;
 })();
-// Feed cut F (21/10/2026, Charlie at 0:10: "I disappear from the screen here"): the grid v5 tile. A laptop as wide as the card on the
-// grid floor, his live clip sharp on its screen from the first frame. The camera breathes in toward the screen. No blur, no loading bar.
+// Feed cut F (21/10/2026). Review fix: the clip stays on the screen.
+// r7: the grid v5 laptop, whole, on the tinted floor. The beat opens on himView: the picture shrinks and its frame narrows into the laptop
+// screen as the laptop body rises in round it (one camera move), he talks on the screen (live clip, sharp), then it grows back out to himView.
 if (FACEF) (() => {
-  const SW = Math.round(Z.w * 1.3), SH = Math.round(SW * .64), SX = Math.round((Z.w - SW) / 2), SY = Math.round(BEYE - SH * .62), s = 1.0 * SW / 1080;
+  const SW = Z.w - 64, SH = Math.round(SW * .625), SX = 32, SY = Math.round(BEYE - SH * .5 - 40), BZ = 14;
+  const sS = 1.18 * SW / 1080, sE = [Z.w / 2, SY + SH * .42];          // his view on the screen: head and shoulders, eye 42% down
+  const TIN = .34, TOUT = .3;
   FX[9] = Object.assign({}, FX[9], {
-    Send: 1, fullWin: true, seq: true,
+    Send: 1, fullWin: true, seq: true, camera: () => null,
     html(id, inner) {
-      return `<div class="Z fx9f">${stageZ('floor')}<div class="Z fx9w" style="transform-origin:${Z.w / 2}px ${SY + SH / 2}px">
-        <div style="position:absolute;left:${SX - 14}px;top:${SY - 14}px;width:${SW + 28}px;height:${SH + 26}px;border-radius:18px;background:#1b1c1f;box-shadow:0 34px 64px -16px rgba(16,24,40,.5)"></div>
-        <div style="position:absolute;left:${SX - 10}px;top:${SY + SH + 12}px;width:${SW + 20}px;height:18px;border-radius:2px 2px 14px 14px;background:linear-gradient(#e4e6ea,#b9bec5);box-shadow:0 20px 32px -10px rgba(16,24,40,.45)"></div>
-        <div style="position:absolute;left:${SX - 40}px;top:${SY + SH + 30}px;width:${SW + 80}px;height:${Z.h - SY - SH}px;clip-path:polygon(4% 0,96% 0,100% 100%,0 100%);background:linear-gradient(#d9dce1,#c4c8ce 60%,#b4b9c0)"></div>
-        <div style="position:absolute;left:${SX + 30}px;top:${SY + SH + 50}px;width:${SW - 60}px;height:${Math.round((Z.h - SY - SH) * .42)}px;clip-path:polygon(3% 0,97% 0,100% 100%,0 100%);background:repeating-linear-gradient(90deg,#2b2d31 0 30px,#c4c8ce 30px 34px),#2b2d31;-webkit-mask:repeating-linear-gradient(#000 0 26px,transparent 26px 32px)"></div>
-        <div style="position:absolute;left:${Z.w / 2 - 90}px;top:${SY + SH + 60 + Math.round((Z.h - SY - SH) * .42)}px;width:180px;height:${Math.round((Z.h - SY - SH) * .3)}px;border-radius:10px;background:#bfc3c9;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)"></div>
-        <div style="position:absolute;left:${SX}px;top:${SY}px;width:${SW}px;height:${SH}px;border-radius:3px;overflow:hidden;background:#111">${plate(PT(9), SW / 2, SH * .46, s, 'fx9-live')}
-          <div class="Z" style="background:linear-gradient(115deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.12) 48%,rgba(255,255,255,0) 60%)"></div></div></div>${SLOT}</div>`;
+      return `<div class="Z fx9f"><div class="Z f9lap">
+        <div class="f9sh" style="position:absolute;left:${SX - 60}px;top:${SY + SH + 40}px;width:${SW + 120}px;height:60px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,19,47,.28),rgba(0,19,47,0))"></div>
+        <div class="f9lid" style="position:absolute;left:${SX - BZ}px;top:${SY - BZ}px;width:${SW + 2 * BZ}px;height:${SH + 2 * BZ + 4}px;border-radius:18px;background:#1b1c1f;box-shadow:0 34px 64px -16px rgba(16,24,40,.5)"><i style="position:absolute;left:50%;top:5px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#3a3c41"></i></div>
+        <div class="f9base" style="position:absolute;left:${SX - 46}px;top:${SY + SH + BZ + 4}px;width:${SW + 92}px;height:20px;border-radius:2px 2px 16px 16px;background:linear-gradient(#e4e6ea,#b9bec5);box-shadow:0 18px 30px -10px rgba(16,24,40,.45)"><i style="position:absolute;left:50%;top:0;width:96px;height:7px;margin-left:-48px;border-radius:0 0 7px 7px;background:#a5abb3"></i></div></div>
+        <div class="Z f9scr" style="overflow:hidden"><div class="Z f9him" style="transform-origin:0 0">${himView(PT(9), 'me')}</div>
+          <div class="Z f9gl" style="background:linear-gradient(115deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.12) 48%,rgba(255,255,255,0) 60%)"></div></div></div>${SLOT}`;
     },
-    camera: () => null,
-    seek(cam, t, d) { const b = (1 - Math.cos(2 * Math.PI * cl(t / d))) / 2, sc = 1 + .1 * b; one(cam, '.fx9w').style.transform = `translateY(${(8 * b).toFixed(1)}px) scale(${sc.toFixed(4)})`; },
-    win: () => ({ c: ZC, w: Z.w, h: Z.h, rr: 0 }), winIn: (t, d) => P(t, d - .133, .133),
+    seek(cam, t, d) {
+      const e = edgeE(t, d, TIN, TOUT), b = Math.sin(Math.PI * P(t, TIN, d - TIN - TOUT)), k = 1 + .05 * b;   // e: 1 = full card, 0 = on the screen. k: a slow push in while he talks
+      const C = [Z.w / 2, SY + SH / 2], sc = (x, y) => [C[0] + (x - C[0]) * k, C[1] + (y - C[1]) * k];
+      const [x0, y0] = sc(SX, SY), [x1, y1] = sc(SX + SW, SY + SH);
+      const L = mix(x0, 0, e), T = mix(y0, 0, e), R = mix(x1, Z.w, e), B = mix(y1, Z.h, e), rr = mix(4, Z.r, e);
+      const scr = one(cam, '.f9scr'); scr.style.clipPath = `inset(${T.toFixed(1)}px ${(Z.w - R).toFixed(1)}px ${(Z.h - B).toFixed(1)}px ${L.toFixed(1)}px round ${rr.toFixed(1)}px)`;
+      const eS = sc(...sE), s = Math.pow(BS, e) * Math.pow(sS * k, 1 - e);
+      one(cam, '.f9him').style.transform = hvT(mix(eS[0], Z.w / 2, e), mix(eS[1], BEYE, e), s);
+      // the laptop body: grows from the screen box with the same move, and comes in as the frame narrows
+      const lap = one(cam, '.f9lap'), m = (R - L) / SW;
+      lap.style.transformOrigin = '0 0'; lap.style.transform = `translate(${L.toFixed(1)}px,${T.toFixed(1)}px) scale(${m.toFixed(4)}) translate(${-SX}px,${-SY}px)`;
+      lap.style.opacity = (1 - P(e, .55, .45)).toFixed(3);
+      one(cam, '.f9gl').style.opacity = (1 - e).toFixed(3);
+    },
+    win: () => ({ c: ZC, w: Z.w, h: Z.h, rr: 0 }),
   });
 })();

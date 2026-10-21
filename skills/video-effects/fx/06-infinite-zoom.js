@@ -25,7 +25,7 @@
   };
 })();
 
-// Feed cut F (20/10/2026 23:40, Charlie 23:34: the grid tiles look "way more premium"): the LinkedIn grid Infinite Zoom, copied in
+// Feed cut F (20/10/2026 23:40): the LinkedIn grid Infinite Zoom, copied in
 // and scaled to the face card. A true Droste: a framed print on his wall (top right, clear of his face) shows his shot, which holds
 // the same print. The camera zooms into the print until the inner him fills the card at his plain view, then the next effect
 // dissolves in over the last 4 frames. A and B unchanged.

@@ -85,6 +85,40 @@
   };
   FX[8] = LG;
 })();
-// Feed cut F (21/10/2026, Charlie: "between Liquid Glass and here is very fast"): no dive into the pane. His face stays whole with the
+// Feed cut F (21/10/2026): no dive into the pane. His face stays whole with the
 // glass over him to the end; Screen in Screen dissolves in over the last 4 frames.
-if (FACEF) Object.assign(FX[8], { noDive: true, fullWin: true });
+// r7 (21/10/2026): the grid v5 tile on the tall card. An iOS liquid glass tab bar rises over his
+// chest, a liquid selection drop slides across its icons, then the bar sinks away, so the beat starts and ends on himView.
+if (FACEF) (() => {
+  const MAG = 1.14, ED = 14, cx = Z.w / 2, cy = BEYE + (PG.chin - PG.eye) * BS + 190, W0 = Z.w - 56, H0 = 120, IX = [-.36, -.12, .12, .36].map(k => k * W0);
+  const ic = [`<path d="M8 26 L30 8 L52 26 V52 H37 V37 H23 V52 H8 Z"/>`, `<circle cx="27" cy="27" r="15" fill="none" stroke-width="7"/><path d="M38 38 L52 52" stroke-width="8" stroke-linecap="round"/>`,
+    `<path d="M18 10 L50 30 L18 50 Z"/>`, `<circle cx="30" cy="20" r="11"/><path d="M8 54 C8 38 52 38 52 54 Z"/>`];
+  const lens = (k) => `<div class="g8w" data-m="${k}" style="position:absolute;left:0;top:0;width:${Z.w}px;height:${Z.h}px;transform-origin:0 0;filter:saturate(1.35) brightness(1.08)">${himView(PT(8), 'me')}</div>`;
+  const rect = (e, x, y, w, h, r) => Object.assign(e.style, { left: x.toFixed(1) + 'px', top: y.toFixed(1) + 'px', width: w.toFixed(1) + 'px', height: h.toFixed(1) + 'px', borderRadius: r.toFixed(1) + 'px' });
+  FX[8] = Object.assign({}, FX[8], {
+    Send: 1, fullWin: true, camera: () => null,
+    html(id, inner) {
+      return `<style>.fx8v .bx{position:absolute;overflow:hidden}.fx8v .rim{position:absolute;pointer-events:none;box-shadow:inset 0 0 0 2.5px rgba(255,255,255,.98),inset 0 0 0 5px rgba(120,200,255,.55),inset 0 0 0 7px rgba(255,255,255,.25),inset 0 0 26px 6px rgba(0,19,47,.22),inset 0 -24px 40px rgba(0,19,47,.22),0 22px 40px -10px rgba(0,19,47,.6),0 0 0 1.5px rgba(0,19,47,.28)}
+        .fx8v .spec{position:absolute;pointer-events:none;background:radial-gradient(ellipse 42% 30% at 28% 20%,rgba(255,255,255,.85),rgba(255,255,255,0) 72%),radial-gradient(ellipse 30% 14% at 72% 86%,rgba(255,255,255,.35),rgba(255,255,255,0) 70%)}
+        .fx8v svg{position:absolute;width:46px;height:46px;filter:drop-shadow(0 1px 1px rgba(255,255,255,.6))}</style>
+        <div class="Z fx8v">${himView(PT(8), 'me')}<div class="Z" data-noface>
+        <div class="bx g"><div class="Z" style="left:0;top:0">${lens(MAG * 1.3)}</div><div class="bx gi">${lens(MAG)}</div><div class="Z" style="background:rgba(255,255,255,.14)"></div></div><div class="spec sp"></div><div class="rim rm"></div>
+        <div class="bx sl">${lens(1.5)}<div class="Z" style="background:rgba(255,255,255,.18)"></div></div><div class="spec ss"></div><div class="rim sr"></div>
+        ${ic.map((q, j) => `<svg class="i${j}" viewBox="0 0 60 60">${q}</svg>`).join('')}</div></div>${SLOT}`;
+    },
+    seek(cam, t, d) {
+      const up = ez(P(t, .02, .28)), dn = eio(P(t, d - .24, .24)), wob = 8 * Math.sin(2 * Math.PI * t / d * 2);
+      const y0 = mix(Z.h + 90, cy, up * (1 - dn)) , w = W0 + wob, h = H0 - wob * .5, x = cx - w / 2, y = y0 - h / 2, r = h / 2;
+      const G = one(cam, '.fx8v .g'), GI = one(cam, '.fx8v .gi');
+      [G, one(cam, '.fx8v .sp'), one(cam, '.fx8v .rm')].forEach(e => rect(e, x, y, w, h, r)); rect(GI, ED, ED, w - 2 * ED, h - 2 * ED, r - ED);
+      const place = (wr, m, ox, oy) => { wr.style.transform = camT([cx, y0], [ox, oy], m); };
+      own(cam, '.fx8v .g > .Z > .g8w').forEach(e => place(e, MAG * 1.3, w / 2, h / 2)); own(cam, '.fx8v .gi .g8w').forEach(e => place(e, MAG, w / 2 - ED, h / 2 - ED));
+      const p = eio(P(t, .22, d - .5)), v = Math.sin(Math.PI * p), sx = cx + mix(IX[0], IX[2], p), sw = 100 + 90 * v, sh = 92 - 12 * v;
+      [one(cam, '.fx8v .sl'), one(cam, '.fx8v .ss'), one(cam, '.fx8v .sr')].forEach(e => rect(e, sx - sw / 2, y0 - sh / 2, sw, sh, sh / 2));
+      own(cam, '.fx8v .sl .g8w').forEach(e => { e.style.transform = camT([sx, y0], [sw / 2, sh / 2], 1.5); });
+      for (let j = 0; j < 4; j++) { const e = one(cam, '.fx8v .i' + j), dd = Math.abs(cx + IX[j] - sx), on = 1 - P(dd, 24, 48), c = on > .5 ? '#0071E3' : '#1d1d1f';
+        Object.assign(e.style, { left: (cx + IX[j] - 23).toFixed(1) + 'px', top: (y0 - 23).toFixed(1) + 'px', fill: c, stroke: c, transform: `scale(${(1 + .18 * on).toFixed(3)})` }); }
+    },
+    win: () => ({ c: ZC, w: Z.w, h: Z.h, rr: 0 }),
+  });
+})();

@@ -10,7 +10,7 @@
   const eyeH = R1.y - (COL - PG.eye) * sH, cx = Z.w / 2, RC = [cx, R1.y + H1 / 2];
   const S10 = 2.4, wE = Z.w / S10, hE = Z.h / S10, LIFT = 0;
   const sp = p => p <= 0 ? 0 : p >= 1 ? 1 : 1 - Math.exp(-6 * p) * Math.cos(9 * p) * (1 - p);
-  const DF = (((window.TIMINGS || {}).F || {}).effects || [])[9]?.len || .78;
+  const DF = .78;   // the face-card beat length this older block was timed to (the F block below replaces it in this pack)
   const form = t => FACEF ? ez(P(t, .04, .34)) * (1 - eio(P(t, DF - .22, .2))) : ez(P(t, .08, .72));   // F's beat is 0.78s: the print lands by 0.38s, holds, and opens back out to his full view for the seam (no double head)
   const dv = (t, d) => FACEF ? 0 : eio(P(t, d - .56, .56));   // F: no dive, the print holds at full strength to the seam
   // him: scale and eye height (scene coords), and the live/still split line at his collar
@@ -81,3 +81,39 @@
 // F keeps this reel build at full strength (print lands by 0.44s, live head over the top border, chips fly) and dissolves into the
 // next effect over the last 4 frames, with no dive (F's 0.78s beat is too short for one). A and B unchanged.
 if (FACEF) Object.assign(FX[10], { Send: 1, camera: () => null, win: () => ({ c: ZC, w: Z.w, h: Z.h, rr: 0 }), winIn: (t, d) => P(t, d - .133, .133) });
+// r7 (21/10/2026).
+// One clean photo, all live: his shot shrinks into a white-mat print of his head and shoulders (one picture, no still body, so no seam).
+// His live cut-out breaks out over the top border with chips flying, then the print grows back out to himView for the hand-off.
+if (FACEF) (() => {
+  const PX0 = 150, PX1 = 930, PY0 = 690, PY1 = 1240;                       // the print's crop on his plate: brow to upper chest, shoulder to shoulder
+  const sP = .88 * Z.w / (PX1 - PX0), pw = (PX1 - PX0) * sP, ph = (PY1 - PY0) * sP;
+  const px = (Z.w - pw) / 2, py = BEYE + 40, eyP = py + (PG.eye - PY0) * sP, exP = px + (540 - PX0) * sP, MAT = 12, MATB = 30;
+  const TIN = .26, TOUT = .24;
+  const CHP = [[-.42, -.9, 70, 1.1], [-.3, -1.1, -140, .8], [-.12, -1, 60, .6], [.14, -1.05, -80, .7], [.3, -.95, 120, .9], [.44, -1.1, -60, 1]];
+  FX[10] = Object.assign({}, FX[10], {
+    Send: 1, fullWin: true, camera: () => null,
+    html(id, inner) {
+      return `<style>.fx10v .pm{position:absolute;background:#fff;box-shadow:inset 0 0 0 1px rgba(29,29,31,.05),0 2px 4px rgba(0,19,47,.08),0 34px 60px -22px rgba(0,19,47,.5)}
+        .fx10v .ch{position:absolute;width:26px;height:18px;background:#fff;box-shadow:0 4px 8px rgba(0,19,47,.25)}</style>
+        <div class="Z fx10v"><div class="Z f10t" style="transform-origin:${Z.w / 2}px ${py + ph / 2}px"><div class="pm"></div>
+        <div class="Z f10p" style="overflow:hidden"><div class="Z f10h" style="transform-origin:0 0">${himView(PT(10), 'me')}</div></div>
+        <div class="Z f10c" style="overflow:hidden"><div class="Z f10hc" style="transform-origin:0 0">${cut(PT(10), Z.w / 2, BEYE, BS, 'me')}</div></div>
+        ${CHP.map((c, i) => `<div class="ch c${i}" style="clip-path:polygon(${['0 0,100% 18%,78% 100%,8% 72%', '12% 0,100% 30%,60% 100%,0 60%', '0 20%,85% 0,100% 85%,20% 100%'][i % 3]})"></div>`).join('')}</div></div>${SLOT}`;
+    },
+    seek(cam, t, d) {
+      const e = edgeE(t, d, TIN, TOUT), f = 1 - e, hold = P(t, TIN, d - TIN - TOUT);
+      const s = Math.pow(BS, e) * Math.pow(sP * (1 + .03 * hold), f), ex = mix(exP, Z.w / 2, e), ey = mix(eyP, BEYE, e);
+      const L = mix(px, 0, e), T = mix(py, 0, e), R = mix(px + pw, Z.w, e), B = mix(py + ph, Z.h, e);
+      const tr = hvT(ex, ey, s); one(cam, '.f10h').style.transform = tr; one(cam, '.f10hc').style.transform = tr;
+      one(cam, '.f10p').style.clipPath = `inset(${T.toFixed(1)}px ${(Z.w - R).toFixed(1)}px ${(Z.h - B).toFixed(1)}px ${L.toFixed(1)}px)`;
+      one(cam, '.f10c').style.clipPath = `inset(0px 0px ${(Z.h - T - 2).toFixed(1)}px 0px)`;           // his head out over the top border, live, the same picture
+      const m = one(cam, '.pm'), mt = MAT * f, mb = MATB * f;
+      Object.assign(m.style, { left: (L - mt).toFixed(1) + 'px', top: (T - mt).toFixed(1) + 'px', width: (R - L + 2 * mt).toFixed(1) + 'px', height: (B - T + mt + mb).toFixed(1) + 'px', opacity: P(f, 0, .3).toFixed(3) });
+      one(cam, '.f10t').style.transform = `rotate(${(-3.5 * f + 1.2 * Math.sin(Math.PI * hold) * f).toFixed(2)}deg)`;
+      const bt = P(t, TIN - .04, .42);                                     // the chips break off the top border as his head comes through
+      CHP.forEach(([ux, uy, rot, sp], i) => { const c = one(cam, '.fx10v .c' + i), g = bt * sp, x = px + pw / 2 + ux * pw + 160 * ux * g, y = T - 10 + uy * 260 * g + 420 * g * g;
+        Object.assign(c.style, { left: x.toFixed(1) + 'px', top: y.toFixed(1) + 'px', transform: `rotate(${(rot * g).toFixed(1)}deg)`, opacity: (bt > 0 ? 1 - P(g, .6, .4) : 0) * (1 - P(e, 0, .2)) }); });
+    },
+    win: () => ({ c: ZC, w: Z.w, h: Z.h, rr: 0 }),
+  });
+})();

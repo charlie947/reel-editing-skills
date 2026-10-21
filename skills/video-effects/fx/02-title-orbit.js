@@ -44,7 +44,15 @@ const ORBIT = {
 };
 
 FX[2] = ORBIT;
-// Feed cut F (21/10/2026, Charlie: the blue circle at 0:02): no dropped O ring and no dive into his face. TITLE ORBIT stays whole and spins
-// to the end; Lens dissolves in over the last 4 frames.
-if (FACEF) { const sk = FX[2].seek; Object.assign(FX[2], { noDive: true, fullWin: true, seek(cam, t, d) { sk.call(this, cam, t, d); one(cam, '.osv').style.opacity = 0;
-  const K = d / 2, phi = orbPhi(t, K), tl = orbTilt(t, K), L = letterAt(OI, phi, tl), B = own(cam, '.ob'), Fr = own(cam, '.of'); B[OI].style.opacity = L.s <= 0 ? .5 : 0; Fr[OI].style.opacity = L.s > 0 ? 1 : 0; } }); }
+// Feed cut F (21/10/2026). Review fix: no dropped O ring and no dive into the face. The O stays in the word.
+// Seamless: over the last 0.32s the camera rises from his cut-out on the floor to himView while his room fades in behind him and the
+// title lifts away, so the Lens beat starts on the exact frame this one ends on.
+if (FACEF) { const sk = FX[2].seek, hk = FX[2].html, TOUT = .32, TIN = SETUP.n === 2 ? .32 : 0, CY = V !== 'B' ? .5 * Z.h : 760, CS = V !== 'B' ? .62 : .75;   // cutView's eye and scale for this layout
+  Object.assign(FX[2], { fullWin: true,
+    html(id, inner) { return hk.call(this, id, inner).replace(`${cutView(PT(2), 'me')}`, `<div class="Z f2room">${plate(PT(2), Z.w / 2, CY, CS, 'me')}</div>${cutView(PT(2), 'me')}`); },
+    camera(t, d) { return edgeCam(edgeE(t, d, TIN, TOUT), Z.w / 2, CY, CS); },
+    seek(cam, t, d) { sk.call(this, cam, t, d); const e = edgeE(t, d, TIN, TOUT); one(cam, '.osv').style.opacity = 0;
+      const K = d / 2, phi = orbPhi(t, K), tl = orbTilt(t, K), L = letterAt(OI, phi, tl), B = own(cam, '.ob'), Fr = own(cam, '.of'); B[OI].style.opacity = L.s <= 0 ? .5 : 0; Fr[OI].style.opacity = L.s > 0 ? 1 : 0;
+      one(cam, '.f2room').style.opacity = e.toFixed(3);
+      const up = `translateY(${(-160 * e).toFixed(1)}px)`, o = (1 - P(e, 0, .7)).toFixed(3);
+      [B[0].parentElement, Fr[0].parentElement, one(cam, '.ringB'), one(cam, '.ringF')].forEach(x => { x.style.transform = up; x.style.opacity = o; }); } }); }

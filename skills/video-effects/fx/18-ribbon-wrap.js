@@ -72,5 +72,5 @@ FX[18] = (() => {
     winIn: (t, d) => { const dl = Math.max(.12, d - .03 - DV); return P(t, DV + .45 * dl, .3 * dl); },   // late: the tag is already big when the next shot shows
   };
 })();
-// Feed cut F (21/10/2026, Charlie: "random box-like phone thing"): no gift tag, no "19" card, no dive. Zoom-Through dissolves in over 4 frames.
+// Feed cut F (21/10/2026): no gift tag, no "19" card, no dive. Zoom-Through dissolves in over 4 frames.
 if (FACEF) { const sk = FX[18].seek; Object.assign(FX[18], { noDive: true, fullWin: true, seek(cam, t, d) { sk.call(this, cam, t, d); own(cam, '.tg,.tc').forEach(e => e.style.display = 'none'); } }); }

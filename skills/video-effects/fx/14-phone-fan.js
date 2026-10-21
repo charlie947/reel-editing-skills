@@ -7,7 +7,8 @@
   const PV = [SC[0], SC[1] + 1.1 * sh];                                     // the fan pivot, low like a hand holding cards
   const ANG = V === 'A' ? [-20, -10, 10, 20] : [-14, -7, 7, 14];
   const T = { pull: [.02, .36], fan: [.16, .44], win: [.44, .1], dive: [.52, .46] };
-  const zoom = t => { const e1 = ez(P(t, ...T.pull)), e2 = eio(P(t, ...T.dive)); return e2 > 0 ? e2 : 1 - e1; };
+  const zoom = t => { const e1 = FACEF ? eio(P(t, 0, .4)) : ez(P(t, ...T.pull)),   // F r7: the pull-back eases in from himView (was a 2-frame drop at the seam)
+    e2 = eio(P(t, ...T.dive)); return e2 > 0 ? e2 : 1 - e1; };
   const r = v => v.toFixed(1) + 'px';
   const phone = (inner, cls = '') => `<div class="fx14-ph${cls}" style="left:${r(SC[0] - sw / 2 - b)};top:${r(SC[1] - sh / 2 - b)};width:${r(sw + 2 * b)};height:${r(sh + 2 * b)};border-radius:${r(rb)};padding:${r(b)}">
       <div class="fx14-sc" style="border-radius:${r(rs)}">${inner}</div></div>`;

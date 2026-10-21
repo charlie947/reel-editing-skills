@@ -29,7 +29,7 @@
   };
 })();
 
-// Feed cut F (20/10/2026 23:36, Charlie 23:34: "portal one looks really cheap on the current reel versus on the infographic"):
+// Feed cut F (20/10/2026 23:36):
 // the LinkedIn grid Portal, copied in and scaled to the face card. A glowing blue ring opens on his face. Inside it a smaller
 // him turns in a blue vortex. Then we dive through the ring: the inner him grows to fill the card at exactly his plain view,
 // so the next effect (which opens on him) takes over with no jump. Cuts A and B keep the ring above.

@@ -70,15 +70,21 @@ function sceneDOM(s, next, id, inner) {
   return `<div class="Z cam">${s.html(id, inner).replace(SLOT, emb)}</div>`;
 }
 const FACEF = ((window.REEL || {}).cut || '') === 'F';
+// Feed cut F seams (21/10/2026): every F effect starts and ends on himView.
+// edgeE = 1 at a beat's edges, 0 in its middle (tin/tout: the morph lengths). edgeCam maps a view of him (eye ex,ey at plate scale s) onto himView.
+const edgeE = (t, d, tin, tout) => Math.max(tin ? 1 - eio(P(t, 0, tin)) : 0, tout ? eio(P(t, d - tout, tout)) : 0);
+const edgeCam = (e, ex, ey, s) => e > 0.0005 ? { a: [ex, ey], f: [mix(ex, Z.w / 2, e), mix(ey, BEYE, e)], S: Math.pow(BS / s, e) } : null;
+// hvBox: the transform that moves himView (eye Z.w/2,BEYE, scale BS) to eye (ex,ey) at scale s, for a wrapper holding himView
+const hvT = (ex, ey, s) => camT([Z.w / 2, BEYE], [ex, ey], s / BS);
 function runScene(s, root, t, d, next) {
   const cam = root.querySelector(':scope > .cam');
-  // Feed cut F (21/10/2026 00:20, Charlie: "it zooms here, then goes nowhere"): no dive that crops his face. Any camera push in (S > 1) is dropped
+  // Feed cut F (21/10/2026 00:20): no dive that crops his face. Any camera push in (S > 1) is dropped
   // on the effects that opt in (noDive): Title Orbit, Lens, Ribbon. Every other camera plays as at 20:36.
   const c0 = s.camera ? s.camera(t, d) : null, c = FACEF && s.noDive && c0 && c0.S > 1.001 ? null : c0;
   cam.style.transformOrigin = '0 0'; cam.style.transform = c ? camT(c.a, c.f, c.S) : 'none';
   s.seek(cam, t, d);
   const emb = one(cam, '.emb');
-  // Feed cut F (20/10/2026 23:40, Charlie: "the overall effects were stronger" at 20:36): every effect moves exactly as at 20:36.
+  // Feed cut F (20/10/2026 23:40): every effect moves exactly as at 20:36.
   // Only the hand-off changes: while a view of him is on the card, the next shot waits and dissolves in over the last 4 frames
   // to the seam (no double head, no one-frame pop). When the effect itself has hidden him, the next shot shows as designed.
   const faces = FACEF && next && s.seq !== false && s.Send !== 1 ? own(cam, 'img[data-eb]').filter(m => !m.closest('[data-noface]')) : [];
@@ -86,7 +92,7 @@ function runScene(s, root, t, d, next) {
   if (emb && next) {
     // F (opt-in fullWin): the hand-off is the next effect at full card, dissolving in over the last 2 frames (no window, no early ring, no ghost dive)
     const FW = FACEF && !!s.fullWin, W = FW ? { c: ZC, w: Z.w, h: Z.h, rr: 0 } : s.win(t, d), Se = FW ? 1 : s.Send;
-    emb.style.transformOrigin = '0 0'; emb.style.transform = embT(W.c, Se);
+    emb.style.transformOrigin = '0 0'; emb.style.transform = FW && c ? camT(c.f, c.a, 1 / c.S) : embT(W.c, Se);   // F full-card hand-off: undo this scene's camera, so the next scene sits at identity
     emb.style.clipPath = W.r != null ? `circle(${(W.r * Se).toFixed(1)}px at ${ZC[0]}px ${ZC[1]}px)`
       : `inset(${(ZC[1] - W.h * Se / 2).toFixed(1)}px ${(ZC[0] - W.w * Se / 2).toFixed(1)}px ${(ZC[1] - W.h * Se / 2).toFixed(1)}px ${(ZC[0] - W.w * Se / 2).toFixed(1)}px round ${((W.rr || 0) * Se).toFixed(1)}px)`;
     const wi = FW ? cl((t - (d - .067)) / .067) : s.winIn ? s.winIn(t, d) : 1, o = faces.some(vis) && s.dissolve !== false ? Math.min(wi, cl((t - (d - .133)) / .133)) : wi; emb.style.opacity = o.toFixed(3); emb.style.visibility = o > 0 ? 'visible' : 'hidden';
