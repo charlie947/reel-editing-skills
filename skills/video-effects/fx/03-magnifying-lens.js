@@ -44,7 +44,7 @@ if (FACEF) (() => {
       .l3h i{position:absolute;left:4px;right:4px;top:0;height:46px;border-radius:6px;background:linear-gradient(90deg,#7d828b,#d9dce1 40%,#7d828b)}
       .l3s{position:absolute;border-radius:50%;pointer-events:none;background:radial-gradient(ellipse 42% 30% at 28% 20%,rgba(255,255,255,.85),rgba(255,255,255,0) 72%),radial-gradient(ellipse 30% 14% at 72% 86%,rgba(255,255,255,.35),rgba(255,255,255,0) 70%),radial-gradient(circle,rgba(255,255,255,0) 62%,rgba(150,200,255,.22) 100%)}
       .l3r{position:absolute;border-radius:50%;pointer-events:none;box-shadow:inset 0 0 0 3px rgba(255,255,255,.95),inset 0 0 22px 4px rgba(0,19,47,.3),0 0 0 15px #2a2c31,0 0 0 17px #6b6f77,0 0 0 18px rgba(0,0,0,.35),0 24px 44px -6px rgba(0,19,47,.6)}
-      </style><div class="Z body">${lensHim('me')}</div><div class="l3h"><i></i></div><div class="Z lensIn"><div class="Z mag" data-noface>${lensHim('me')}</div>${SLOT}</div><div class="l3s"></div><div class="l3r"></div>`; },
+      </style><div class="Z body">${lensHim('me')}</div><div class="l3h"><i></i></div><div class="Z lensIn"><div class="Z mag" data-noface>${lensHim('me')}</div></div><div class="l3s"></div><div class="l3r"></div>${SLOT}`; },   // the next shot sits outside the clipped, moving glass, so it dissolves in across the whole card
     camera(t, d) { const z = Zf(t, d), L = at(t); return z > 0 ? { a: L, f: [mix(L[0], ZC[0], z), mix(L[1], ZC[1], z)], S: Math.pow(this.Send, z) } : null; },
     seek(cam, t, d) { const L = at(t), z = Zf(t, d), band = 1 - P(t, DV(d), .15);
       const li = one(cam, '.lensIn'); li.style.clipPath = `circle(${Math.max(R * .9, this.wr(t, d) + 2).toFixed(1)}px at ${L[0].toFixed(1)}px ${L[1].toFixed(1)}px)`;
@@ -56,8 +56,8 @@ if (FACEF) (() => {
     winIn: (t, d) => { const dv = DV(d), dl = d - dv; return P(t, dv + .3 * dl, .25 * dl); },
   });
 })();
-// Feed cut F (21/10/2026): no dive. The beat ends on the magnifier over his chest logo;
-// Portal dissolves in over the last 4 frames, so no ring shows early.
-if (FACEF) { const sk = FX[3].seek; Object.assign(FX[3], { noDive: true, fullWin: true, seek(cam, t, d) { sk.call(this, cam, t, 99);
-  const x = eio(P(t, d - .3, .3)), tr = x > 0 ? `translate(${(380 * x).toFixed(1)}px,${(420 * x).toFixed(1)}px)` : '';   // the glass glides off bottom right, so Portal opens on his whole face
-  ['.lensIn', '.l3s', '.l3r', '.l3h'].forEach(k => { const el = one(cam, k); if (el) el.style.translate = x > 0 ? `${(380 * x).toFixed(1)}px ${(420 * x).toFixed(1)}px` : ''; }); } }); }   // 99: the rim and the 2.2x logo hold to the last frame
+// Feed cut F (21/10/2026): no dive. The beat ends on the magnifier over his chest logo, then the glass drifts down and
+// fades out over the last 0.3s, so the hand-off is his plain shot with no glass left to pop off.
+if (FACEF) { const sk = FX[3].seek; Object.assign(FX[3], { noDive: true, fullWin: true, seek(cam, t, d) { sk.call(this, cam, t, 99);   // 99: the rim and the 2.2x logo hold until the fade
+  const x = eio(P(t, d - .3, .3));   // translate and opacity are set fresh on every call, so seek stays a pure function of t
+  ['.lensIn', '.l3s', '.l3r', '.l3h'].forEach(k => { const el = one(cam, k); if (!el) return; el.style.translate = x > 0 ? `${(110 * x).toFixed(1)}px ${(130 * x).toFixed(1)}px` : ''; el.style.opacity = (1 - x).toFixed(3); }); } }); }

@@ -37,7 +37,7 @@ if (FACEF) (() => {
     name: NAMES[5], row: 5, bg: 'floor', Send: 1,
     html() { return `<style>.z6{position:absolute;left:0;top:0;width:${Z.w}px;height:${Z.h}px;overflow:hidden;transform-origin:0 0}
       .z6.p{box-shadow:0 0 0 30px #fff,0 0 0 34px rgba(29,29,31,.22),0 30px 60px 10px rgba(16,24,40,.5)}</style>
-      ${[...Array(NL).keys()].map(i => `<div class="z6${i ? ' p' : ''}" data-l="${i}">${himView(PT(6), i ? 'deco' : 'me')}</div>`).join('')}${SLOT}`; },
+      ${[...Array(NL).keys()].map(i => `<div class="z6${i ? ' p' : ''}" data-l="${i}">${himView(PT(6), 'me')}</div>`).join('')}${SLOT}`; },   // every level is live ('me'), so the print that grows to fill the card keeps talking
     camera: () => null,
     seek(cam, t, d) { const s = Math.pow(1 / R, w(t, d)), a = ez(P(t, .02, .14));
       own(cam, '.z6').forEach(e => { const i = +e.dataset.l, si = s * Math.pow(R, i) * (i === 1 ? .85 + .15 * a : 1);
